@@ -40,6 +40,7 @@ class Admin_panel_settingRequest extends FormRequest
            'is_transfer_vaccation'=>'required',
            'is_pull_anuall_day_from_passma'=>'required',
            'is_outo_offect_passmaV'=>'required',
+           'number_addinal_get'=>'required',
         ];
     }
 
@@ -62,7 +63,8 @@ class Admin_panel_settingRequest extends FormRequest
        'sanctions_value_thaird_abcence'=>'قيمة خصم الايام بعد ثالث مرة غياب بدون اذن مطلوب',
        'is_transfer_vaccation'=>'تحديد ترحيل الاجازات خلال انتهاء السنه الماليه مطلوب',
        'is_pull_anuall_day_from_passma'=>'هل يتم سحب ايام غياب السنوى تلقائى من تقفيل البصمه',
-          'is_outo_offect_passmaV'=>'هل يتم  اسقاط متغيرات البصمه من عدمه',
+        'is_outo_offect_passmaV'=>'هل يتم  اسقاط متغيرات البصمه من عدمه',
+        'number_addinal_get'=>'ادخل حساب ساعه الاضافى',
 
 
         ];

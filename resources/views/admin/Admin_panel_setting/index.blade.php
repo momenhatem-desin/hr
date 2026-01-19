@@ -60,6 +60,10 @@
                <td class="width30"><i class="fas fa-calendar-minus text-danger"></i> نخصم بعد كم مره تاخير او انصارف مبكر يوم كامل</td>
                <td>{{ $data['after_time_allday_daycut'] }}</td>
             </tr>
+               <tr>
+               <td class="width30"><i class="fas fa-calendar-minus text-danger"></i> يتم حساب ساعه الاضافى ب </td>
+               <td>{{ $data['number_addinal_get'] }}</td>
+            </tr>
               <tr>
                <td class="width30"><i class="fas fa-calendar-minus text-danger"></i>اقل من كام دقيقه فرق بين البصمه الاولى والثانيه يتم اهمال البصمه</td>
                <td>{{ $data['less_than_miniute_neglecting_passmaa'] }}</td>

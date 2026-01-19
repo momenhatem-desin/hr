@@ -111,6 +111,16 @@
                   @enderror
                </div>
             </div>
+           <div class="col-md-12">
+               <div class="form-group">
+                  <label>يتم حساب ساعه الاضافى </label>
+                  <input type="text" name="number_addinal_get" id="number_addinal_get" class="form-control" value="{{old('number_addinal_get',$data['number_addinal_get'])  }}" oninput="this.value=this.value.replace(/[^0-9.]/g,'');" >
+                  @error('number_addinal_get')
+                  <span class="text-danger">{{ $message }}</span> 
+                  @enderror
+               </div>
+            </div>
+            
               <div class="col-md-12">
                <div class="form-group">
                   <label>الحد الاقصى لاحتساب عدد ساعات عمل اضافيه عند انصراف الموظف واحتساب بصمه الانصراف والا ستحتسب على انهاء بصمه حضور شفت جديد	</label>

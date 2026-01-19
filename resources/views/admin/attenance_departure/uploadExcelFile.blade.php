@@ -28,12 +28,26 @@
                <div class="col-md-12">
                <div class="form-group">
                   <label> اختر ملف البصمة  </label>
-                  <span style="color: brown">ملاحظه:سيتم اهمال اى بصمه خارج نطاق فترة الشهر المالى</span>
+                  <span style="color: brown">ملاحظه:سيتم اهمال اى بصمه خارج نطاق فترة الشهر المالى وفى حاله عدم تحديد الفرع سيعتبر بصمه مركزيه</span>
                   <input required type="file" name="excel_file" id="excel_file" class="form-control"  >
                    @error('excel_file')
                   <span class="text-danger">{{ $message }}</span> 
                   @enderror
                </div>
+                 <div class="text-center alert alert-info mb-4 ">
+                               فرع
+                            (
+                            <select name="branch_id_up" id="branch_id_up">
+                                @foreach ($branches as $branch)
+                                <option
+                                    value="{{ $branch->id }}"
+                                    {{ old('branch_id') == $branch->id ? 'selected' : '' }}>
+                                    {{ $branch->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                            )
+                        </div>
             </div>
             <div class="col-md-12">
                <div class="form-group text-center">

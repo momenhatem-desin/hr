@@ -70,25 +70,27 @@ class attenance_departureController extends Controller
   public function uploadExcelFile($finance_cln_periods_id)
   {
     $com_code = auth('admin')->user()->com_code;
+     $admin = auth('admin')->user();
+    $branches = $admin->branches;
     $finance_cln_periods_data = get_cols_where_row(new Finance_cln_periods(), array("*"), array("com_code" => $com_code, 'id' => $finance_cln_periods_id, "is_open" => 1));
 
     if (empty($finance_cln_periods_data)) {
       return redirect()->route('attenance_departure.index')->with(['error' => 'عفوا  غير قادر على الوصول الى البيانات المطلوبة ! ']);
     }
 
-    return view('admin.attenance_departure.uploadExcelFile', ['finance_cln_periods_data' => $finance_cln_periods_data]);
+    return view('admin.attenance_departure.uploadExcelFile', ['finance_cln_periods_data' => $finance_cln_periods_data,"branches"=>$branches]);
   }
 
   public function DoUploadExcelFile($finance_cln_periods_id, Attenance_departureUploadExcel $request)
   {
     $com_code = auth('admin')->user()->com_code;
     $finance_cln_periods_data = get_cols_where_row(new Finance_cln_periods(), array("*"), array("com_code" => $com_code, 'id' => $finance_cln_periods_id, "is_open" => 1));
-
+   
     if (empty($finance_cln_periods_data)) {
       return redirect()->route('attenance_departure.index')->with(['error' => 'عفوا  غير قادر على الوصول الى البيانات المطلوبة ! ']);
     }
 
-    Excel::import(new Attendance_departureImport($finance_cln_periods_data), $request->excel_file);
+    Excel::import(new Attendance_departureImport($finance_cln_periods_data,$request->branch_id_up), $request->excel_file);
     return redirect()->route('attenance_departure.show', $finance_cln_periods_data)->with(['success' => 'تم سحب البصمه بنجاح']);
   }
 

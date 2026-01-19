@@ -515,20 +515,25 @@ trait GeneralTrait
     public function Recalculate_auto_passma_variables($main_salary_employee_id)
     {
         $com_code = auth('admin')->user()->com_code;
+        $settings = get_cols_where_row(new Admin_panel_setting(), array("number_addinal_get"), array('com_code' => $com_code));
         $Main_salary_employee_data = get_cols_where_row(new Main_salary_employee, array("*"), array("com_code" => $com_code, "id" => $main_salary_employee_id, "is_archived" => 0));
         if (!empty($Main_salary_employee_data)) {
-            $employee_data = get_cols_where_row(new Employee(), array("employees_code", "day_price", "id"), array("com_code" => $com_code, "employees_code" => $Main_salary_employee_data['employees_code']));
+            $employee_data = get_cols_where_row(new Employee(), array("employees_code", "day_price", "id","daily_work_hour"), array("com_code" => $com_code, "employees_code" => $Main_salary_employee_data['employees_code']));
             $Finance_cln_periods_data = get_cols_where_row(new Finance_cln_periods, array("year_and_month"), array("com_code" => $com_code, "is_open" => 1, "id" => $Main_salary_employee_data['Finance_cln_periods_id']));
             if (!empty($employee_data) and !empty($Finance_cln_periods_data)) {
                 // اولا نجيب ايام لغياب بدون اذن 
                 $absence_passma = get_count_where(new Attenance_departure(), array("Finance_cln_periods_id" => $Main_salary_employee_data['Finance_cln_periods_id'], "employees_code" => $Main_salary_employee_data['employees_code'], "com_code" => $com_code, "vacations_types_id" => 6));
+                //بدو ن اجر
                 $absence_passma_not_salary = get_count_where(new Attenance_departure(), array("Finance_cln_periods_id" => $Main_salary_employee_data['Finance_cln_periods_id'], "employees_code" => $Main_salary_employee_data['employees_code'], "com_code" => $com_code, "vacations_types_id" => 7));
+                //مرضى
                 $absence_passma_midcal = get_count_where(new Attenance_departure(), array("Finance_cln_periods_id" => $Main_salary_employee_data['Finance_cln_periods_id'], "employees_code" => $Main_salary_employee_data['employees_code'], "com_code" => $com_code, "vacations_types_id" => 11));
+                //الاضافى
+                  $addtion_passma = get_sum_where(new Attenance_departure(),"additional_hours",array("Finance_cln_periods_id" => $Main_salary_employee_data['Finance_cln_periods_id'], "employees_code" => $Main_salary_employee_data['employees_code'], "com_code" => $com_code));
                 // نشوف اولا لو يوجد سجل نحدثو ولو لا يوجد نعمل ادخال
                 $get_exsistes_absence_passma = get_cols_where_row(new Main_salary_employee_absence(), array("id"), array("Finance_cln_periods_id" => $Main_salary_employee_data['Finance_cln_periods_id'], "employees_code" => $Main_salary_employee_data['employees_code'], "com_code" => $com_code, "is_auto" => 1, "kind_auto" => 1));
                 $get_exsistes_absence_passma_not_salary = get_cols_where_row(new Main_salary_employee_absence(), array("id"), array("Finance_cln_periods_id" => $Main_salary_employee_data['Finance_cln_periods_id'], "employees_code" => $Main_salary_employee_data['employees_code'], "com_code" => $com_code, "is_auto" => 1, "kind_auto" => 2));
                 $get_exsistes_absence_passma_midcal = get_cols_where_row(new Main_salary_employee_absence(), array("id"), array("Finance_cln_periods_id" => $Main_salary_employee_data['Finance_cln_periods_id'], "employees_code" => $Main_salary_employee_data['employees_code'], "com_code" => $com_code, "is_auto" => 1, "kind_auto" => 3));
-
+                $get_exsistes_addtion_passma = get_cols_where_row(new Main_salary_employees_addtion(), array("id"), array("Finance_cln_periods_id" => $Main_salary_employee_data['Finance_cln_periods_id'], "employees_code" => $Main_salary_employee_data['employees_code'], "com_code" => $com_code, "is_auto" => 1));
                 if (empty($get_exsistes_absence_passma)) {
                     //ادخال
                     $dataToInsert['main_salary_employee_id'] = $main_salary_employee_id;
@@ -601,6 +606,30 @@ trait GeneralTrait
                     $data_to_updateAbsence['com_code'] = $com_code;
                     $flag = update(new Main_salary_employee_absence(), $data_to_updateAbsence, array("id" => $get_exsistes_absence_passma_midcal['id']));
                 }
+                 if (empty($get_exsistes_addtion_passma)) {
+                    //ادخال
+                    $dataToInsert['main_salary_employee_id'] = $main_salary_employee_id;
+                    $dataToInsert['finance_cln_periods_id'] = $Main_salary_employee_data['Finance_cln_periods_id'];
+                    $dataToInsert['is_auto'] = 1;
+                    $dataToInsert['employees_code'] = $Main_salary_employee_data['employees_code'];
+                    $dataToInsert['emp_day_price'] = $employee_data['day_price'];
+                    $dataToInsert['value'] = $addtion_passma/24;
+                    $dataToInsert['total'] = ($employee_data['day_price']/$employee_data['daily_work_hour']) *  ($addtion_passma * $settings['number_addinal_get']);
+                    $dataToInsert['is_archived'] = 0;
+                    $dataToInsert['notes'] = "إضافي أيام تلقائي ({$addtion_passma} ساعة)";
+                    $dataToInsert['added_by'] = auth('admin')->user()->id;
+                    $dataToInsert['com_code'] = $com_code;
+                    $flag = insert(new Main_salary_employees_addtion(), $dataToInsert);
+                } else {
+                    //تحديث
+                    $data_to_updateAbsence['emp_day_price'] = $employee_data['day_price'];
+                    $data_to_updateAbsence['value'] = $addtion_passma/24;
+                    $data_to_updateAbsence['total'] = ($employee_data['day_price']/$employee_data['daily_work_hour']) *  ($addtion_passma * $settings['number_addinal_get']);
+                    $data_to_updateAbsence['updated_by'] = auth('admin')->user()->id;
+                    $data_to_updateAbsence['com_code'] = $com_code;
+                    $flag = update(new Main_salary_employees_addtion(), $data_to_updateAbsence, array("id" => $get_exsistes_addtion_passma['id']));
+                }
+           
             }
         }
     }
