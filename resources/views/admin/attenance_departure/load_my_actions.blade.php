@@ -28,6 +28,26 @@
                </div>
             </div>
 </div>
+@if($parent['is_updated_active_action']==1)
+<div class="col-md-12">
+<p style="text-align: center; color:brown">
+ ملاحظه : تم التعديل على البصمات (
+                
+                     @php
+                     $dt=new DateTime($parent['is_updated_action_date']);
+                     $date=$dt->format("Y-m-d");
+                     $time=$dt->format("h:i");
+                     $newDateTime=date("a",strtotime($parent['is_updated_action_date']));
+                     $newDateTimeType= (($newDateTime=='am'||$newDateTime=='AM')?'صباحا ':'مساء'); 
+                     @endphp
+                     {{ $date }} 
+                     {{ $time }}
+                     {{ $newDateTimeType }}
+                بواسطة  ()                  
+         )
+</p>  
+</div>
+@endif
 @endif
 @if(@isset($attenance_departure_actions) and !@empty($attenance_departure_actions) )
 <table id="example2" class="table table-bordered table-hover">

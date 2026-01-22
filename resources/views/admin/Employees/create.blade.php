@@ -917,6 +917,20 @@
                   @enderror
                </div>
             </div>
+             <div class="col-md-4">
+                  <div class="form-group">
+                     <label>    هل يمتلك سماحيه الدخول للنظام </label>
+                     <select  name="is_active_login_system" id="is_active_login_system" class="form-control">
+                        <option value="">  اختر الحالة</option>
+                     <option   @if(old('is_active_login_system')==1) selected @endif  value="1">نعم </option>
+                     <option @if(old('is_active_login_system')==0 and old('is_active_login_system')!="" ) selected @endif value="0">لا</option>
+                
+                  </select>
+                     @error('is_active_login_system')
+                     <span class="text-danger">{{ $message }}</span> 
+                     @enderror
+                  </div>
+               </div> 
          </div>
 
          </div>
@@ -1081,6 +1095,10 @@ $(".relatedismedicalinsurance").hide();
    $(".relatedismedicalinsurance").show();
 
  }
+
+ 
+ 
+
 
    });
 </script>

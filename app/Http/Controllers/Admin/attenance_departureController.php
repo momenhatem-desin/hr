@@ -239,7 +239,7 @@ class attenance_departureController extends Controller
   {
     if ($request->ajax()) {
       $com_code = auth('admin')->user()->com_code;
-      $parent = get_cols_where_row(new Attenance_departure(), array("id", "datetime_In", "datetime_out", "is_archived"), array("com_code" => $com_code, 'employees_code' => $request->employees_code, 'Finance_cln_periods_id' => $request->finance_cln_periods_id, "id" => $request->id));
+      $parent = get_cols_where_row(new Attenance_departure(), array("id", "datetime_In", "datetime_out", "is_archived","is_updated_active_action"), array("com_code" => $com_code, 'employees_code' => $request->employees_code, 'Finance_cln_periods_id' => $request->finance_cln_periods_id, "id" => $request->id));
       $attenance_departure_actions = get_cols_where(new Attenance_actions(), array("*"), array("com_code" => $com_code, 'employees_code' => $request->employees_code, 'Finance_cln_periods_id' => $request->finance_cln_periods_id, "attendance_departure_id" => $request->id), 'datetimeAction', 'ASC');
       if (!empty($attenance_departure_actions)) {
         foreach ($attenance_departure_actions as $info) {
@@ -656,15 +656,30 @@ class attenance_departureController extends Controller
             $dateUpdate['additional_hours'] = $hourdiff - $attenance_departure['shift_hour_contract'];
             $dateUpdate['absen_hours'] = 0;
           }
+          $dateUpdate['is_updated_active_action'] = 1;
+          $dateUpdate['is_updated_action_date'] =date('Y-m-d H:i:s');
+          $dateUpdate['is_updated_active_by'] = auth('admin')->user()->id;
           $flagupdateperent = update(new Attenance_departure(), $dateUpdate,  array("com_code" => $com_code, "id" => $request->id, "is_archived" => 0, "finance_cln_periods_id" => $request->finance_cln_periods_id, "employees_code" => $request->employees_code));
           if ($flagupdateperent) {
 
             return json_encode("done");
           }
         } else {
-          $dataToupdate['total_hours'] = 0;
-          $dataToupdate['additional_hours'] = 0;
-          $dataToupdate['absen_hours'] = 0;
+           $dateUpdate['is_updated_active_action'] = 1;
+          $dateUpdate['is_updated_action_date'] =date('Y-m-d H:i:s');
+          $dateUpdate['is_updated_active_by'] = auth('admin')->user()->id;
+          $dateUpdate['total_hours'] = 0;
+          $dateUpdate['additional_hours'] = 0;
+          $dateUpdate['absen_hours'] = 0;
+          $dateUpdate['datetime_out'] = null;
+          $dateUpdate['dateOut'] = null;
+
+           $flagupdateperent = update(new Attenance_departure(), $dateUpdate,  array("com_code" => $com_code, "id" => $request->id, "is_archived" => 0, "finance_cln_periods_id" => $request->finance_cln_periods_id, "employees_code" => $request->employees_code));
+          if ($flagupdateperent) {
+
+            return json_encode("done");
+          }
+
         }
       }
     }

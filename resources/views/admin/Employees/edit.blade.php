@@ -11,7 +11,7 @@
 قائمة الضبط
 @endsection
 @section('contentheaderactivelink')
-<a href="{{ route('Employees.index') }}">     الموظفين</a>
+<a href="{{ route('Employees.index') }}"> الموظفين</a>
 @endsection
 @section('contentheaderactive')
 تعديل
@@ -635,7 +635,7 @@
                </div>
             </div>
 
-            <div class="col-md-4 relatedfixced_shift"  @if(old('is_has_fixced_shift',$data['is_has_fixced_shift'])==0 or old('is_has_fixced_shift')=="") style="display: none;" @endif>
+            <div class="col-md-4 relatedfixced_shift"  @if(old('is_has_fixced_shift',$data['is_has_fixced_shift'])==0) style="display: none;" @endif>
                <div class="form-group">
                   <label>       أنواع الشفتات <span style="color:red">*</span></label>
                   <select name="shift_type_id" id="shift_type_id" class="form-control select2 ">
@@ -678,7 +678,7 @@
                   @enderror
                </div>
             </div>
-            <div class="col-md-4" id="daily_work_hourDiv" @if(old('is_has_fixced_shift',$data['is_has_fixced_shift'])==1 || old('is_has_fixced_shift')=="") style="display: none;" @endif>
+            <div class="col-md-4" id="daily_work_hourDiv" @if(old('is_has_fixced_shift',$data['is_has_fixced_shift'])==1) style="display: none;" @endif>
                <div class="form-group">
                   <label>       عدد ساعات العمل اليومي <span style="color:red">*</span></label>
                   <input type="text" name="daily_work_hour" id="daily_work_hour" oninput="this.value=this.value.replace(/[^0-9.]/g,'');" class="form-control" value="{{ old('daily_work_hour',$data['daily_work_hour']) }}" >
@@ -797,7 +797,7 @@
                   <select  name="Does_have_fixed_allowances" id="Does_have_fixed_allowances" class="form-control">
                      <option value="">اختر الحالة</option>
                   <option   @if(old('Does_have_fixed_allowances',$data['Does_have_fixed_allowances'])==1) selected @endif  value="1">نعم</option>
-                  <option @if(old('Does_have_fixed_allowances',$data['Does_have_fixed_allowances'])==0 and old('Does_have_fixed_allowances')!="" ) selected @endif value="0"> لا </option>
+                  <option @if(old('Does_have_fixed_allowances',$data['Does_have_fixed_allowances'])==0) selected @endif value="0"> لا </option>
              
                </select>
                   @error('Does_have_fixed_allowances')
@@ -915,6 +915,19 @@
                   @enderror
                </div>
             </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                     <label>    هل يمتلك سماحيه الدخول للنظام </label>
+                     <select  name="is_active_login_system" id="is_active_login_system" class="form-control">
+                        <option value="">  اختر الحالة</option>
+                     <option  @if(old('is_active_login_system',$data['is_active_login_system'])==1) selected @endif  value="1">نعم </option>
+                     <option  @if(old('is_active_login_system',$data['is_active_login_system'])==0 and old('is_active_login_system')!=""  ) selected @endif value="0">لا</option>
+                  </select>
+                     @error('is_active_login_system')
+                     <span class="text-danger">{{ $message }}</span> 
+                     @enderror
+                  </div>
+               </div> 
          </div>
 
          </div>

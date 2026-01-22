@@ -182,7 +182,8 @@ class EmployeesController extends Controller
    $dataToInsert['MotivationType']=$request->MotivationType;
    $dataToInsert['emp_Basic_stay_com']=$request->emp_Basic_stay_com;
    $dataToInsert['is_Sensitive_manager_data']=$request->is_Sensitive_manager_data;
-   $dataToInsert['Does_have_fixed_allowances']=$request->Does_have_fixed_allowances;
+   $dataToInsert['is_active_login_system']=$request->is_active_login_system;
+   
    if(!empty($request->emp_sal)){
      $dataToInsert['day_price']=$request->emp_sal/30;
    }
@@ -368,6 +369,7 @@ class EmployeesController extends Controller
    $dataToupdate['brith_date']=$request->brith_date;
    $dataToupdate['emp_Basic_stay_com']=$request->emp_Basic_stay_com;
    $dataToupdate['MotivationType']=$request->MotivationType;
+   $dataToupdate['is_active_login_system']=$request->is_active_login_system;
    $dataToupdate['updated_by'] = auth()->user()->id;
    if(!empty($request->emp_sal) && is_numeric($request->emp_sal)){
     $dataToupdate['day_price'] = round($request->emp_sal / 30, 2);

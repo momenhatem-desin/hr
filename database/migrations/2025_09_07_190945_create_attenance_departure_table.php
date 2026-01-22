@@ -42,6 +42,9 @@ return new class extends Migration
             $table->integer("branch_id")->nullable()->comment("الفرع التابع له الموظف لحظه هذا الارشيف");
             $table->tinyInteger('attendance_type')->default(1)->comment("1 = بصمة، 2 = يدوي");
             $table->foreignId('main_salary_employee_id')->nullable();
+            $table->integer('is_updated_active_action')->nullable()->default(0)->comment("هل تم التعديل على البصمات الفعليه");
+            $table->dateTime('is_updated_action_date')->nullable()->comment("تاريخ التعديل على البصمات الفعليه");   
+            $table->foreignId('is_updated_active_by')->nullable()->references('id')->on('admins')->onUpdate('cascade')->comment("من قام باخر تعديل على البصمات الفعليه"); 
             $table->foreignId('added_by')->references('id')->on('admins')->onUpdate('cascade');
             $table->foreignId('updated_by')->nullable()->references('id')->on('admins')->onUpdate('cascade');
             $table->integer('com_code');

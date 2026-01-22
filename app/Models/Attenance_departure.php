@@ -16,4 +16,7 @@ class Attenance_departure extends Model
      public function updatedby(){
         return $this->belongsTo('\App\Models\Admin','updated_by');
      }
+    public function updatedbyforaction(){
+        return $this->belongsTo('\App\Models\Admin','is_updated_active_by');
+     }
 }

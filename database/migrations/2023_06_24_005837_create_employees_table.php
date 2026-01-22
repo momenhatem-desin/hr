@@ -89,8 +89,8 @@ return new class extends Migration
             $table->decimal("day_price", 10, 2)->nullable()->comment("سعر يوم الموظف");
             $table->tinyInteger("Does_have_fixed_allowances")->nullable()->default(0)->comment("هل له بدلات ثابته");
             $table->tinyInteger("is_done_Vaccation_formula")->nullable()->default(0)->comment("هل تمت المعادله التلقائية لاحتساب الرصيد السنوي للموظف");
-          $table->tinyInteger("is_Sensitive_manager_data")->nullable()->default(0)->comment("هل بيانات حساساه للمديرين مثلا ولاتظهر الا بصلاحيات خاصة	");
-           
+            $table->tinyInteger("is_Sensitive_manager_data")->nullable()->default(0)->comment("هل بيانات حساساه للمديرين مثلا ولاتظهر الا بصلاحيات خاصة	");
+            $table->tinyInteger("is_active_login_system")->nullable()->default(0)->comment("هل للموظف سماحيه الدخول للنظام");
             $table->foreignId("added_by")->references("id")->on("admins")->onUpdate("cascade");
             $table->foreignId("updated_by")->nullable()->references("id")->on("admins")->onUpdate("cascade");
             $table->integer("com_code");
