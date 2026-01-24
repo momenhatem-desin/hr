@@ -608,26 +608,26 @@ trait GeneralTrait
                 }
                  if (empty($get_exsistes_addtion_passma)) {
                     //ادخال
-                    $dataToInsert['main_salary_employee_id'] = $main_salary_employee_id;
-                    $dataToInsert['finance_cln_periods_id'] = $Main_salary_employee_data['Finance_cln_periods_id'];
-                    $dataToInsert['is_auto'] = 1;
-                    $dataToInsert['employees_code'] = $Main_salary_employee_data['employees_code'];
-                    $dataToInsert['emp_day_price'] = $employee_data['day_price'];
-                    $dataToInsert['value'] = $addtion_passma/24;
-                    $dataToInsert['total'] = ($employee_data['day_price']/$employee_data['daily_work_hour']) *  ($addtion_passma * $settings['number_addinal_get']);
-                    $dataToInsert['is_archived'] = 0;
-                    $dataToInsert['notes'] = "إضافي أيام تلقائي ({$addtion_passma} ساعة)";
-                    $dataToInsert['added_by'] = auth('admin')->user()->id;
-                    $dataToInsert['com_code'] = $com_code;
-                    $flag = insert(new Main_salary_employees_addtion(), $dataToInsert);
+                    $dataToInsertAddtion['main_salary_employee_id'] = $main_salary_employee_id;
+                    $dataToInsertAddtion['finance_cln_periods_id'] = $Main_salary_employee_data['Finance_cln_periods_id'];
+                    $dataToInsertAddtion['is_auto'] = 1;
+                    $dataToInsertAddtion['employees_code'] = $Main_salary_employee_data['employees_code'];
+                    $dataToInsertAddtion['emp_day_price'] = $employee_data['day_price'];
+                    $dataToInsertAddtion['value'] = $addtion_passma/24;
+                    $dataToInsertAddtion['total'] = ($employee_data['day_price']/$employee_data['daily_work_hour']) *  ($addtion_passma * $settings['number_addinal_get']);
+                    $dataToInsertAddtion['is_archived'] = 0;
+                    $dataToInsertAddtion['notes'] = "إضافي أيام تلقائي ({$addtion_passma} ساعة)";
+                    $dataToInsertAddtion['added_by'] = auth('admin')->user()->id;
+                    $dataToInsertAddtion['com_code'] = $com_code;
+                    $flag = insert(new Main_salary_employees_addtion(), $dataToInsertAddtion);
                 } else {
                     //تحديث
-                    $data_to_updateAbsence['emp_day_price'] = $employee_data['day_price'];
-                    $data_to_updateAbsence['value'] = $addtion_passma/24;
-                    $data_to_updateAbsence['total'] = ($employee_data['day_price']/$employee_data['daily_work_hour']) *  ($addtion_passma * $settings['number_addinal_get']);
-                    $data_to_updateAbsence['updated_by'] = auth('admin')->user()->id;
-                    $data_to_updateAbsence['com_code'] = $com_code;
-                    $flag = update(new Main_salary_employees_addtion(), $data_to_updateAbsence, array("id" => $get_exsistes_addtion_passma['id']));
+                    $data_to_updateAddtion['emp_day_price'] = $employee_data['day_price'];
+                    $data_to_updateAddtion['value'] = $addtion_passma/24;
+                    $data_to_updateAddtion['total'] = ($employee_data['day_price']/$employee_data['daily_work_hour']) *  ($addtion_passma * $settings['number_addinal_get']);
+                    $data_to_updateAddtion['updated_by'] = auth('admin')->user()->id;
+                    $data_to_updateAddtion['com_code'] = $com_code;
+                    $flag = update(new Main_salary_employees_addtion(), $data_to_updateAddtion, array("id" => $get_exsistes_addtion_passma['id']));
                 }
            
             }

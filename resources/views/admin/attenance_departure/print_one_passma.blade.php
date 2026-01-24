@@ -146,7 +146,7 @@
                 @endforeach
                 <!-- صف الإجماليات -->
                 <tr>
-                    <td colspan="4" style="font-weight: 800; font-size: 16px;">الإجماليات</td>
+                    <td colspan="5" style="font-weight: 800; font-size: 16px;">الإجماليات</td>
                    
                    
                     <td style=" border-radius: 5px; padding: 10px;">

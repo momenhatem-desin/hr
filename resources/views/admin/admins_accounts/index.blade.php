@@ -67,6 +67,7 @@
                   </thead>
                   <tbody>
                      @foreach ($data as $info )
+                     @if( $info->id!=1)
                      <tr>
                         <td>{{ $i }}</td>
                         <td>{{ $info->name }}</td>
@@ -116,6 +117,57 @@
                            @endif
                         </td>
                      </tr>
+                     @elseif(auth()->user()->id==1)
+                        <tr>
+                        <td>{{ $i }}</td>
+                        <td>{{ $info->name }}</td>
+                        <td>{{ $info->permission_roles_name }}</td>
+                        <td>@if($info->active==1) مفعل @else معطل @endif</td>
+                        <td>
+                           @if(auth()->user()->is_master_admin==1 || check_permission_sub_menue(3))
+                     <a href="{{ route('admin.admins_accounts.branches_edit',$info->id) }}"
+                        class="btn btn-sm btn-warning">
+                        الفروع
+                     </a>
+                     @endif
+                        </td>
+                     <td>
+                     @php
+                     $dt=new DateTime($info->created_at);
+                     $date=$dt->format("Y-m-d");
+                     $time=$dt->format("h:i");
+                     $newDateTime=date("a",strtotime($info->created_at));
+                     $newDateTimeType= (($newDateTime=='am'||$newDateTime=='AM')?'صباحا ':'مساء'); 
+                     @endphp
+                     {{ $date }} <br>
+                     {{ $time }}
+                     {{ $newDateTimeType }}  <br>
+                     {{ $info->added->name }} 
+                  </td>
+                  <td>
+                     @if($info->updated_by>0)
+                     @php
+                     $dt=new DateTime($info->updated_at);
+                     $date=$dt->format("Y-m-d");
+                     $time=$dt->format("h:i");
+                     $newDateTime=date("a",strtotime($info->updated_at));
+                     $newDateTimeType= (($newDateTime=='am'||$newDateTime=='AM')?'صباحا ':'مساء'); 
+                     @endphp
+                     {{ $date }}  <br>
+                     {{ $time }}
+                     {{ $newDateTimeType }}  <br>
+                     {{ $info->updatedby->name }} 
+                     @else
+                     لايوجد
+                     @endif
+                  </td>
+                        <td>
+                           @if( auth()->user()->is_master_admin==1 or check_permission_sub_menue_actions(157)) 
+                           <a href="{{ route('admin.admins_accounts.edit',$info->id) }}" class="btn btn-sm  btn-primary">تعديل</a>   
+                           @endif
+                        </td>
+                     </tr>
+                     @endif
                      @php
                      $i++; 
                      @endphp

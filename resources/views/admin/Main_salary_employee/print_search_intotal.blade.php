@@ -41,7 +41,7 @@
                text-align: center;
                color: red;
                border: 1px solid black;border-radius:10px !important ">
-               بحث  بالغياب الايام الخاصه بالرواتب بالشهر المالى ({{ $finance_cln_periods_data['month']->name }}لسنة {{ $finance_cln_periods_data['FINANCE_YR'] }})
+                بحث   بمفردات المرتب ({{ $finance_cln_periods_data['month']->name }}لسنة {{ $finance_cln_periods_data['FINANCE_YR'] }})
             </span>
          </td>
       </tr>

@@ -105,7 +105,7 @@
                text-align: center;
                color: red;
                border: 1px solid black;border-radius:10px !important;border:none; ">
-               بحث  بجزاءات ايام الرواتب بالشهر المالى ({{ $finance_cln_periods_data['month']->name }}لسنة {{ $finance_cln_periods_data['FINANCE_YR'] }})
+                  مفردات مرتب موظف  بالشهر المالى ({{ $finance_cln_periods_data['month']->name }}لسنة {{ $finance_cln_periods_data['FINANCE_YR'] }})
             </span>
          </td>
       </tr>

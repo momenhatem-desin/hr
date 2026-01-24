@@ -2,9 +2,10 @@
     <!-- To the right -->
     <div class="float-right d-none d-sm-inline">
       Anything you want
+   Developed by <a href="#" target="_blank">Mahmoud Hatem</a>   
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2025-2027 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2026-2027 <a href="#">HR_Admin</a>.</strong> All rights reserved.
   </footer>
 
 
