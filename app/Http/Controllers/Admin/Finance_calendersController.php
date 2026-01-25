@@ -20,7 +20,10 @@ class Finance_calendersController extends Controller
 */
 public function index()
 {
- $com_code=auth()->user()->com_code;   
+   if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(4);
+        }    
+ $com_code=auth('admin')->user()->com_code;   
 $data=get_cols_where_p(new Finance_calender(),array("*"),array("com_code"=>$com_code),"id","DESC",PC);
 $CheckDataOpenCounter = Finance_calender::where(['is_open' => 1])->count();
 return view('admin.Finance_calender.index', ['data' => $data,'CheckDataOpenCounter'=>$CheckDataOpenCounter]);
@@ -30,6 +33,9 @@ return view('admin.Finance_calender.index', ['data' => $data,'CheckDataOpenCount
 */
 public function create()
 {
+    if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(3);
+        }    
 return view('admin.Finance_calender.create');
 }
 /**
@@ -37,14 +43,18 @@ return view('admin.Finance_calender.create');
 */
 public function store(Finance_calenders_Request $request)
 {
+    
 try {
+  if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(3);
+        }      
 DB::beginTransaction();
 $dataToInsert['FINANCE_YR'] = $request->FINANCE_YR;
 $dataToInsert['FINANCE_YR_DESC'] = $request->FINANCE_YR_DESC;
 $dataToInsert['start_date'] = $request->start_date;
 $dataToInsert['end_date'] = $request->end_date;
-$dataToInsert['added_by'] = auth()->user()->id;
-$dataToInsert['com_code'] = auth()->user()->com_code;
+$dataToInsert['added_by'] = auth('admin')->user()->id;
+$dataToInsert['com_code'] = auth('admin')->user()->com_code;
 $falg = Finance_calender::insert($dataToInsert);
 if ($falg) {
 $dataParent = Finance_calender::select("id")->where($dataToInsert)->first();
@@ -63,11 +73,11 @@ $dataMonth['END_DATE_M'] = date('Y-m-t', strtotime($date->format('Y-m-d')));
 $dataMonth['year_and_month'] = date('Y-m', strtotime($date->format('Y-m-d')));
 $datediff = strtotime($dataMonth['END_DATE_M']) - strtotime($dataMonth['START_DATE_M']);
 $dataMonth['number_of_days'] = round($datediff / (60 * 60 * 24)) + 1;
-$dataMonth['com_code'] = auth()->user()->com_code;
+$dataMonth['com_code'] = auth('admin')->user()->com_code;
 $dataMonth['updated_at'] = date("Y-m-d H:i:s");
 $dataMonth['created_at'] = date("Y-m-d H:i:s");
-$dataMonth['added_by'] = auth()->user()->id;
-$dataMonth['updated_by'] = auth()->user()->id;
+$dataMonth['added_by'] = auth('admin')->user()->id;
+$dataMonth['updated_by'] = auth('admin')->user()->id;
 $dataMonth['start_date_for_pasma'] = date('Y-m-01', strtotime($date->format('Y-m-d')));
 $dataMonth['end_date_for_pasma'] = date('Y-m-t', strtotime($date->format('Y-m-d')));
 Finance_cln_periods::insert($dataMonth);
@@ -93,6 +103,9 @@ public function show(Finance_calender $finance_calender)
 */
 public function edit($id)
 {
+  if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(5);
+        }   
 $data = Finance_calender::select("*")->where(['id' => $id])->first();
 if (empty($data)) {
 return redirect()->back()->with(['error' => ' عفوا حدث خطأ ']);
@@ -107,7 +120,11 @@ return view('admin.Finance_calender.update', ['data' => $data]);
 */
 public function update($id, Finance_calendersUpdate $request)
 {
+    
 try {
+ if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(5);
+        }    
 $data = Finance_calender::select("*")->where(['id' => $id])->first();
 if (empty($data)) {
 return redirect()->back()->with(['error' => ' عفوا حدث خطأ ']);
@@ -126,7 +143,7 @@ $dataToUpdate['FINANCE_YR'] = $request->FINANCE_YR;
 $dataToUpdate['FINANCE_YR_DESC'] = $request->FINANCE_YR_DESC;
 $dataToUpdate['start_date'] = $request->start_date;
 $dataToUpdate['end_date'] = $request->end_date;
-$dataToUpdate['updated_by'] = auth()->user()->id;
+$dataToUpdate['updated_by'] = auth('admin')->user()->id;
 $falg = Finance_calender::where(['id' => $id])->update($dataToUpdate);
 if ($falg) {
 if ($data['start_date'] != $request->start_date or $data['end_date'] != $request->end_date) {
@@ -147,11 +164,11 @@ $dataMonth['END_DATE_M'] = date('Y-m-t', strtotime($date->format('Y-m-d')));
 $dataMonth['year_and_month'] = date('Y-m', strtotime($date->format('Y-m-d')));
 $datediff = strtotime($dataMonth['END_DATE_M']) - strtotime($dataMonth['START_DATE_M']);
 $dataMonth['number_of_days'] = round($datediff / (60 * 60 * 24)) + 1;
-$dataMonth['com_code'] = auth()->user()->com_code;
+$dataMonth['com_code'] = auth('admin')->user()->com_code;
 $dataMonth['updated_at'] = date("Y-m-d H:i:s");
 $dataMonth['created_at'] = date("Y-m-d H:i:s");
-$dataMonth['added_by'] = auth()->user()->id;
-$dataMonth['updated_by'] = auth()->user()->id;
+$dataMonth['added_by'] = auth('admin')->user()->id;
+$dataMonth['updated_by'] = auth('admin')->user()->id;
 $dataMonth['start_date_for_pasma'] = date('Y-m-01', strtotime($date->format('Y-m-d')));
 $dataMonth['end_date_for_pasma'] = date('Y-m-t', strtotime($date->format('Y-m-d')));
 Finance_cln_periods::insert($dataMonth);
@@ -171,7 +188,11 @@ return   redirect()->back()->with(['error' => 'عفو حدث خطأ ما ' . $ex
 */
 public function destroy($id)
 {
+  
 try {
+    if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(102);
+        }   
 $data = Finance_calender::select("*")->where(['id' => $id])->first();
 if (empty($data)) {
 return redirect()->back()->with(['error' => ' عفوا حدث خطأ ']);
@@ -204,7 +225,7 @@ if ($CheckDataOpenCounter>0) {
 return redirect()->back()->with(['error' => '   عفوا هناك بالفعل سنة مالية مازالت مفتوحة ']);
 }
 $dataToUpdate['is_open']=1;
-$dataToUpdate['updated_by']=auth()->user()->id;
+$dataToUpdate['updated_by']=auth('admin')->user()->id;
 $flag = Finance_calender::where(['id' => $id])->update($dataToUpdate);
 return redirect()->route('finance_calender.index')->with(['success' => 'تم تحديث البيانات بنجاح']);
 } catch (\Exception $ex) {

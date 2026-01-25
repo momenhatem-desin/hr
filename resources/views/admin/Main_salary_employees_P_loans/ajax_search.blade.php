@@ -25,14 +25,14 @@
                 <td> {{ $info->month_kast_value*1}} </td>
                    <td> @if($info->is_dismissail_done==1) نعم @else   لا  @endif
                      @if($info->is_dismissail_done==0 and $info->is_archived==0)
-                     <a href="{{ route('Main_salary_employees_p_loans.do_dismissal_done_now',$info->id) }}"  class="btn  are_you_shur  btn-dark btn-sm">صرف الان</a>
+                     <a href="{{ route('Main_salary_employees_P_loans.do_dismissal_done_now',$info->id) }}"  class="btn  are_you_shur  btn-dark btn-sm">صرف الان</a>
                      @endif
                   </td>
                    <td> @if($info->is_archived==1) نعم @else   لا  @endif </td>
                   <td>
                      @if($info->is_archived==0 && $info->is_dismissail_done==0)
                      <button data-id="{{ $info->id }}"  class="btn  load_edit_this_row  btn-primary btn-sm">تعديل</button>
-                     <a href="{{ route('Main_salary_employees_p_loans.delete',$info->id) }}"  class="btn  are_you_shur  btn-danger btn-sm">حذف</a>
+                     <a href="{{ route('Main_salary_employees_P_loans.delete',$info->id) }}"  class="btn  are_you_shur  btn-danger btn-sm">حذف</a>
                      @endif
                              <button data-id="{{ $info->id }}"  class="btn  load_akast_details  btn-info btn-sm">الاقساط</button>
                   </td>

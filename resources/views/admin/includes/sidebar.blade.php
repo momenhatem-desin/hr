@@ -183,8 +183,8 @@
 
   @endif
           @if(auth()->user()->is_master_admin==1 or check_permission_main_menue(3)==true)
-           <li class="nav-item has-treeview    {{ ( request()->is('admin/MainSalaryRecord*')|| request()->is('admin/MainSalarySanctions*')||request()->is('admin/Main_salary_employee_absence*')||request()->is('admin/Main_salary_employees_addtion*')||request()->is('admin/Main_salary_employees_discound*')||request()->is('admin/Main_salary_employees_rewards*')||request()->is('admin/Main_salary_employees_allowances*')||request()->is('admin/Main_salary_employees_loans*')||request()->is('admin/Main_salary_employees_p_loans*')||request()->is('admin/Main_salary_employee/*') ) ? 'menu-open':'' }} ">
-          <a href="#" class="nav-link {{ ( request()->is('admin/MainSalaryRecord*')||request()->is('admin/MainSalarySanctions*')||request()->is('admin/Main_salary_employee_absence*')||request()->is('admin/Main_salary_employees_addtion*')||request()->is('admin/Main_salary_employees_discound*')||request()->is('admin/Main_salary_employees_rewards*')||request()->is('admin/Main_salary_employees_allowances*')||request()->is('admin/Main_salary_employees_loans*')||request()->is('admin/Main_salary_employees_p_loans*')||request()->is('admin/Main_salary_employee/*') ) ? 'active':'' }} ">
+           <li class="nav-item has-treeview    {{ ( request()->is('admin/MainSalaryRecord*')|| request()->is('admin/MainSalarySanctions*')||request()->is('admin/Main_salary_employee_absence*')||request()->is('admin/Main_salary_employees_addtion*')||request()->is('admin/Main_salary_employees_discound*')||request()->is('admin/Main_salary_employees_rewards*')||request()->is('admin/Main_salary_employees_allowances*')||request()->is('admin/Main_salary_employees_loans*')||request()->is('admin/Main_salary_employees_P_loans*')||request()->is('admin/Main_salary_employee/*') ) ? 'menu-open':'' }} ">
+          <a href="#" class="nav-link {{ ( request()->is('admin/MainSalaryRecord*')||request()->is('admin/MainSalarySanctions*')||request()->is('admin/Main_salary_employee_absence*')||request()->is('admin/Main_salary_employees_addtion*')||request()->is('admin/Main_salary_employees_discound*')||request()->is('admin/Main_salary_employees_rewards*')||request()->is('admin/Main_salary_employees_allowances*')||request()->is('admin/Main_salary_employees_loans*')||request()->is('admin/Main_salary_employees_P_loans*')||request()->is('admin/Main_salary_employee/*') ) ? 'active':'' }} ">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>
              قائمة الاجور 
@@ -234,7 +234,7 @@
             @endif
               @if(auth()->user()->is_master_admin==1 or check_permission_sub_menue(22)==true)
           <li class="nav-item">
-              <a href="{{ route('Main_salary_employees_p_loans.index') }}" class="nav-link {{ (request()->is('admin/Main_salary_employees_p_loans*'))?'active':'' }}">
+              <a href="{{ route('Main_salary_employees_P_loans.index') }}" class="nav-link {{ (request()->is('admin/Main_salary_employees_P_loans*'))?'active':'' }}">
                 <i class="far fa-circle nav-icon"></i>
                 <p>السلف المستديمة</p>
               </a>

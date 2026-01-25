@@ -25,7 +25,8 @@ $data = get_cols_where_p(new Main_salary_employees_P_loans(), array("*"), array(
     }
 }
 $other['employess']=get_cols_where(new Employee(),array("employees_code","emp_name","emp_sal","day_price"),array("com_code"=>$com_code,'Functiona_status'=>1),"id","DESC");
-return view('admin.Main_salary_employees_p_loans.index', ['data' => $data,'other'=>$other]);
+//يوجد مشكله هنا 
+return view('admin.Main_salary_employees_P_loans.index', ['data' => $data,'other'=>$other]);
 }
 
 
@@ -106,7 +107,7 @@ if ($request->ajax()) {
      }
 
     }
-    return view('admin.Main_salary_employees_p_loans.load_akast_details',['dataParentloan'=>$dataParentloan, 'aksatDetails' => $aksatDetails]);
+    return view('admin.Main_salary_employees_P_loans.load_akast_details',['dataParentloan'=>$dataParentloan, 'aksatDetails' => $aksatDetails]);
 }
 }
 
@@ -171,7 +172,7 @@ public function do_edit_row(Request $request)
                                     $dataToupdatekast = [
                                         'main_salary_p_loans_id' =>$request->id,
                                         'month_kast_value' => $dataToUpdate['month_kast_value'],
-                                        'employees_code' =>$request->employees_code_Add,  
+                                        'employees_code' =>$request->employees_code_edit,  
                                         'year_and_month' => $effectiveDate,
                                         'state' => 0,
                                         'is_archived' => 0,
@@ -207,7 +208,7 @@ if ($request->ajax()) {
     $employess=get_cols_where(new Employee(),array("emp_name","emp_sal","day_price","employees_code"),array("com_code"=>$com_code,"Functiona_status"=>1));
 
 
-    return view('admin.Main_salary_employees_p_loans.load_edit_row',['data_row'=>$data_row,'employess'=>$employess]);
+    return view('admin.Main_salary_employees_P_loans.load_edit_row',['data_row'=>$data_row,'employess'=>$employess]);
 }
 }
 
@@ -218,13 +219,13 @@ public function delete($id)
     $com_code = auth('admin')->user()->com_code;  
     $dataParentloan=get_cols_where_row(new Main_salary_employees_P_loans(),array("id"),array("com_code"=>$com_code,"id"=>$id));
     if(empty($dataParentloan)){
-      return view('admin.Main_salary_employees_p_loans.index')->with(['error'=>'عفوا غير قادر على الوصل الى البيانات']);
+      return view('admin.Main_salary_employees_P_loans.index')->with(['error'=>'عفوا غير قادر على الوصل الى البيانات']);
     }
     if($dataParentloan['is_dismissail_done']==1){
-      return view('admin.Main_salary_employees_p_loans.index')->with(['error'=>'عفوا لايمكن حذف سلفه تم صرفها بالفعل']);
+      return view('admin.Main_salary_employees_P_loans.index')->with(['error'=>'عفوا لايمكن حذف سلفه تم صرفها بالفعل']);
     }
      if($dataParentloan['is_archived']==1){
-      return view('admin.Main_salary_employees_p_loans.index')->with(['error'=>'عفوا لايمكن حذف سلفه تم ارشفتها بالفعل']);
+      return view('admin.Main_salary_employees_P_loans.index')->with(['error'=>'عفوا لايمكن حذف سلفه تم ارشفتها بالفعل']);
     }
    DB::beginTransaction(); 
    $flagParent=  destroy(new  Main_salary_employees_P_loans(), array("com_code"=>$com_code,'is_archived'=>0,'is_dismissail_done'=>0,'id'=>$id)); 
@@ -232,7 +233,7 @@ public function delete($id)
      destroy(new  Main_salary_P_loans_akast(), array("com_code"=>$com_code,'state'=>0,'main_salary_p_loans_id'=>$id)); 
    }
      DB::commit();
-      return redirect()->route('Main_salary_employees_p_loans.index')->with(['success'=>' تم حذف البيانات بنجاح']);
+      return redirect()->route('Main_salary_employees_P_loans.index')->with(['success'=>' تم حذف البيانات بنجاح']);
      } catch (\Exception $ex) {
         DB::rollBack();
         return redirect()->back()->with(['error' => 'عفوا حدث خطأ ' . $ex->getMessage()])->withInput();
@@ -284,7 +285,7 @@ $data=Main_salary_employees_P_loans::select("*")->where($field1,$operator1,$valu
       $info->emp_name=get_field_value(new Employee(),"emp_name",array("com_code"=>$com_code,"employees_code"=>$info->employees_code));
     }
 }
-return view('admin.Main_salary_employees_p_loans.ajax_search',['data'=>$data]);
+return view('admin.Main_salary_employees_P_loans.ajax_search',['data'=>$data]);
 }
 }
 
@@ -335,7 +336,7 @@ if(!empty($data)){
     }
   }
 $systemData=get_cols_where_row(new Admin_panel_setting(),array("image","phones","address","company_name"),array("com_code"=>$com_code));  
-return view('admin.Main_salary_employees_p_loans.print_search',['data'=>$data,'systemData'=>$systemData,'other'=>$other]);
+return view('admin.Main_salary_employees_P_loans.print_search',['data'=>$data,'systemData'=>$systemData,'other'=>$other]);
 }
 
 public function do_dismissal_done_now($id)
@@ -344,13 +345,13 @@ public function do_dismissal_done_now($id)
     $com_code = auth('admin')->user()->com_code;  
     $dataParentloan=get_cols_where_row(new Main_salary_employees_P_loans(),array("id"),array("com_code"=>$com_code,"id"=>$id));
     if(empty($dataParentloan)){
-      return view('admin.Main_salary_employees_p_loans.index')->with(['error'=>'عفوا غير قادر على الوصل الى البيانات']);
+      return view('admin.Main_salary_employees_P_loans.index')->with(['error'=>'عفوا غير قادر على الوصل الى البيانات']);
     }
     if($dataParentloan['is_dismissail_done']==1){
-      return view('admin.Main_salary_employees_p_loans.index')->with(['error'=>'عفوا تم صرف السلفه من قبل']);
+      return view('admin.Main_salary_employees_P_loans.index')->with(['error'=>'عفوا تم صرف السلفه من قبل']);
     }
      if($dataParentloan['is_archived']==1){
-      return view('admin.Main_salary_employees_p_loans.index')->with(['error'=>'عفوا لايمكن حذف سلفه تم ارشفتها بالفعل']);
+      return view('admin.Main_salary_employees_P_loans.index')->with(['error'=>'عفوا لايمكن حذف سلفه تم ارشفتها بالفعل']);
     }
    DB::beginTransaction(); 
    $dataToInsert['is_dismissail_done']= 1;
@@ -371,7 +372,7 @@ public function do_dismissal_done_now($id)
             }
         }            
      DB::commit();
-      return redirect()->route('Main_salary_employees_p_loans.index')->with(['success'=>' تم صرف السلفه  بنجاح']);
+      return redirect()->route('Main_salary_employees_P_loans.index')->with(['success'=>' تم صرف السلفه  بنجاح']);
      } catch (\Exception $ex) {
         DB::rollBack();
         return redirect()->back()->with(['error' => 'عفوا حدث خطأ ' . $ex->getMessage()])->withInput();

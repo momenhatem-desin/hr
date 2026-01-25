@@ -10,7 +10,10 @@ class ShiftsTypesController extends Controller
 {
 public function index()
 {
-$com_code = auth()->user()->com_code;
+  if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(9);
+        }    
+$com_code = auth('admin')->user()->com_code;
 $data = get_cols_where_p(new Shifts_type(), array("*"), array("com_code" => $com_code), 'id', 'DESC', PC);
 if(!empty($data)){
     foreach($data as $info){
@@ -22,12 +25,18 @@ return view('admin.ShiftsTypes.index', ['data' => $data]);
 }
 public function create()
 {
+  if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(104);
+        }   
 return view('admin.ShiftsTypes.create');
 }
 public function store(ShiftTypesRequest $request)
 {
 try {
-$dataToInsert['com_code'] = auth()->user()->com_code;
+  if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(104);
+        }     
+$dataToInsert['com_code'] = auth('admin')->user()->com_code;
 $dataToInsert['type'] = $request->type;
 $dataToInsert['from_time'] = $request->from_time;
 $dataToInsert['to_time'] = $request->to_time;
@@ -37,7 +46,7 @@ if (!empty($checkExsitsData)) {
 return redirect()->back()->with(['error' => 'عفوا هذه البيانات مسجلة من قبل !'])->withInput();
 }
 $dataToInsert['active'] = $request->active;
-$dataToInsert['added_by'] = auth()->user()->id;
+$dataToInsert['added_by'] = auth('admin')->user()->id;
 DB::beginTransaction();
 insert(new Shifts_type(), $dataToInsert);
 DB::commit();
@@ -49,7 +58,10 @@ return redirect()->back()->with(['error' => 'عفوا حدث خطأ ' . $ex->get
 }
 public function edit($id)
 {
-$com_code = auth()->user()->com_code;
+  if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(10);
+        }     
+$com_code = auth('admin')->user()->com_code;
 $data = get_cols_where_row(new Shifts_type(), array("*"), array("com_code" => $com_code, 'id' => $id));
 if (empty($data)) {
 return redirect()->route('ShiftsTypes.index')->with(['error' => 'عفوا غير قادر الي الوصول للبيانات المطلوبة']);
@@ -59,7 +71,11 @@ return view('admin.ShiftsTypes.edit', ['data' => $data]);
 public function update($id, ShiftTypesRequest $request)
 {
 try {
-$com_code = auth()->user()->com_code;
+    if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(10);
+        }   
+
+$com_code = auth('admin')->user()->com_code;
 $data = get_cols_where_row(new Shifts_type(), array("*"), array("com_code" => $com_code, 'id' => $id));
 if (empty($data)) {
 return redirect()->route('ShiftsTypes.index')->with(['error' => 'عفوا غير قادر الي الوصول للبيانات المطلوبة']);
@@ -74,7 +90,7 @@ $dataToUpdate['from_time'] = $request->from_time;
 $dataToUpdate['to_time'] = $request->to_time;
 $dataToUpdate['total_hour'] = $request->total_hour;
 $dataToUpdate['active'] = $request->active;
-$dataToUpdate['updated_by'] = auth()->user()->id;
+$dataToUpdate['updated_by'] = auth('admin')->user()->id;
 $flag=update(new Shifts_type(), $dataToUpdate, array("com_code" => $com_code, 'id' => $id));
 if($flag){
     $dataToUpdateEmployees['daily_work_hour']=$dataToUpdate['total_hour'];
@@ -91,7 +107,10 @@ return redirect()->back()->with(['error' => 'عفوا حدث خطأ ' . $ex->get
 public function destroy($id)
 {
 try {
-$com_code = auth()->user()->com_code;
+    if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(11);
+        }   
+$com_code = auth('admin')->user()->com_code;
 $data = get_cols_where_row(new Shifts_type(), array("id"), array("com_code" => $com_code, 'id' => $id));
 if (empty($data)) {
 return redirect()->route('ShiftsTypes.index')->with(['error' => 'عفوا غير قادر الي الوصول للبيانات المطلوبة']);
@@ -113,7 +132,7 @@ return redirect()->back()->with(['error' => 'عفوا حدث خطأ ' . $ex->get
 public function ajax_search(Request $request)
 {
 if ($request->ajax()) {
-$com_code = auth()->user()->com_code;    
+$com_code = auth('admin')->user()->com_code;    
 $type_search = $request->type_search;
 $hour_from_range = $request->hour_from_range;
 $hour_to_range = $request->hour_to_range;

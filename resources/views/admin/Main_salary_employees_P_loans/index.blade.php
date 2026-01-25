@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="{{ asset('assets/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
 @endsection
 @section('contentheaderactivelink')
-<a href="{{ route('Main_salary_employees_p_loans.index') }}">  السلف المستديمة  </a>
+<a href="{{ route('Main_salary_employees_P_loans.index') }}">  السلف المستديمة  </a>
 @endsection
 @section('contentheaderactive')
 عرض
@@ -31,7 +31,7 @@
          <button  href="" class="btn btn-sm btn-success" data-toggle="modal" data-target="#AddModal">اضافة جديد</button>
        
       </div>
-      <form method="POST" action="{{ route('Main_salary_employees_p_loans.print_search') }}" target="_blank">
+      <form method="POST" action="{{ route('Main_salary_employees_P_loans.print_search') }}" target="_blank">
          @csrf
      
       <div class="row" style="padding: 5px;">
@@ -111,14 +111,14 @@
                 <td> {{ $info->month_kast_value*1}} </td>
                    <td> @if($info->is_dismissail_done==1) نعم @else   لا  @endif
                      @if($info->is_dismissail_done==0 and $info->is_archived==0)
-                     <a href="{{ route('Main_salary_employees_p_loans.do_dismissal_done_now',$info->id) }}"  class="btn  are_you_shur  btn-dark btn-sm">صرف الان</a>
+                     <a href="{{ route('Main_salary_employees_P_loans.do_dismissal_done_now',$info->id) }}"  class="btn  are_you_shur  btn-dark btn-sm">صرف الان</a>
                      @endif
                   </td>
                    <td> @if($info->is_archived==1) نعم @else   لا  @endif </td>
                   <td>
                      @if($info->is_archived==0 && $info->is_dismissail_done==0)
                      <button data-id="{{ $info->id }}"  class="btn  load_edit_this_row  btn-primary btn-sm">تعديل</button>
-                     <a href="{{ route('Main_salary_employees_p_loans.delete',$info->id) }}"  class="btn  are_you_shur  btn-danger btn-sm">حذف</a>
+                     <a href="{{ route('Main_salary_employees_P_loans.delete',$info->id) }}"  class="btn  are_you_shur  btn-danger btn-sm">حذف</a>
                      @endif
                              <button data-id="{{ $info->id }}"  class="btn  load_akast_details  btn-info btn-sm">الاقساط</button>
                   </td>
@@ -410,7 +410,7 @@ $(document).on('input', '#total_edit, #month_number_edit', function(e) {
       
       
          jQuery.ajax({
-         url:'{{ route('Main_salary_employees_p_loans.checkExsistsBefore') }}',
+         url:'{{ route('Main_salary_employees_P_loans.checkExsistsBefore') }}',
          type:'post',
          'dataType':'json',
          cache:false,
@@ -429,7 +429,7 @@ $(document).on('input', '#total_edit, #month_number_edit', function(e) {
          if(flagRes==true){
          $('#backup_freeze_modal').modal('show'); 
          jQuery.ajax({
-         url:'{{ route('Main_salary_employees_p_loans.store') }}',
+         url:'{{ route('Main_salary_employees_P_loans.store') }}',
          type:'post',
          'dataType':'html',
          cache:false,
@@ -526,7 +526,7 @@ $(document).on('input', '#total_edit, #month_number_edit', function(e) {
       $('#backup_freeze_modal').modal('show'); 
 
       jQuery.ajax({
-         url:'{{ route('Main_salary_employees_p_loans.do_edit_row') }}',
+         url:'{{ route('Main_salary_employees_P_loans.do_edit_row') }}',
          type:'post',
          'dataType':'html',
          cache:false,
@@ -580,7 +580,7 @@ $(document).on('input', '#total_edit, #month_number_edit', function(e) {
    var is_archived_search=$("#is_archived_search").val();
    var is_dismissail_done_search=$("#is_dismissail_done_search").val();
    jQuery.ajax({
-   url:'{{ route('Main_salary_employees_p_loans.ajax_search') }}',
+   url:'{{ route('Main_salary_employees_P_loans.ajax_search') }}',
    type:'post',
    'dataType':'html',
    cache:false,
@@ -624,7 +624,7 @@ $(document).on('input', '#total_edit, #month_number_edit', function(e) {
     var id=$(this).data("id");
         
       jQuery.ajax({
-      url:'{{ route('Main_salary_employees_p_loans.load_edit_row') }}',
+      url:'{{ route('Main_salary_employees_P_loans.load_edit_row') }}',
       type:'post',
       'dataType':'html',
       cache:false,
@@ -651,7 +651,7 @@ $(document).on('input', '#total_edit, #month_number_edit', function(e) {
         var id=$(this).data("id");
         
       jQuery.ajax({
-      url:'{{ route('Main_salary_employees_p_loans.load_akast_details') }}',
+      url:'{{ route('Main_salary_employees_P_loans.load_akast_details') }}',
       type:'post',
       'dataType':'html',
       cache:false,
@@ -669,7 +669,7 @@ $(document).on('input', '#total_edit, #month_number_edit', function(e) {
 
  });
 
-
+//لايوجد 
 $(document).on('click', '.DoCachpayNow', function(e){
     e.preventDefault();
 
@@ -677,7 +677,7 @@ $(document).on('click', '.DoCachpayNow', function(e){
     var idparent = $(this).data("idparent"); 
 
     $.ajax({
-        url: '{{ route('Main_salary_employees_p_loans.DoCachpayNow') }}',
+        url: '{{ route('Main_salary_employees_P_loans.DoCachpayNow') }}',
         type: 'POST',
         dataType: 'json',
         cache: false,
@@ -689,7 +689,7 @@ $(document).on('click', '.DoCachpayNow', function(e){
         success: function(data){
             // بعد الدفع الكاش حمّل تاني تفاصيل الأقساط
             $.ajax({
-                url: '{{ route('Main_salary_employees_p_loans.load_akast_details') }}',
+                url: '{{ route('Main_salary_employees_P_loans.load_akast_details') }}',
                 type: 'POST',
                 dataType: 'html',
                 cache: false,

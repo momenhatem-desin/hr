@@ -277,17 +277,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::post('/Main_salary_employees_loans/print_search', [Main_salary_employees_loansController::class, 'print_search'])->name('Main_salary_employees_loans.print_search');
 
     /*  بداية   السلف المستديمة  المالية الرواتب */
-    Route::get('/Main_salary_employees_p_loans/index', [Main_salary_employees_p_loansController::class, 'index'])->name('Main_salary_employees_p_loans.index');
-    Route::post('/Main_salary_employees_p_loans/load_edit_row', [Main_salary_employees_p_loansController::class, 'load_edit_row'])->name('Main_salary_employees_p_loans.load_edit_row');
-    Route::post('/Main_salary_employees_p_loans/store', [Main_salary_employees_p_loansController::class, 'store'])->name('Main_salary_employees_p_loans.store');
-    Route::post('/Main_salary_employees_p_loans/checkExsistsBefore', [Main_salary_employees_p_loansController::class, 'checkExsistsBefore'])->name('Main_salary_employees_p_loans.checkExsistsBefore');
-    Route::post('/Main_salary_employees_p_loans/ajax_search', [Main_salary_employees_p_loansController::class, 'ajax_search'])->name('Main_salary_employees_p_loans.ajax_search');
-    Route::get('/Main_salary_employees_p_loans/delete/{id}', [Main_salary_employees_p_loansController::class, 'delete'])->name('Main_salary_employees_p_loans.delete');
-    Route::post('/Main_salary_employees_p_loans/load_akast_details', [Main_salary_employees_p_loansController::class, 'load_akast_details'])->name('Main_salary_employees_p_loans.load_akast_details');
-    Route::post('/Main_salary_employees_p_loans/do_edit_row', [Main_salary_employees_p_loansController::class, 'do_edit_row'])->name('Main_salary_employees_p_loans.do_edit_row');
-    Route::post('/Main_salary_employees_p_loans/print_search', [Main_salary_employees_p_loansController::class, 'print_search'])->name('Main_salary_employees_p_loans.print_search');
-    Route::get('/Main_salary_employees_p_loans/do_dismissal_done_now/{id}', [Main_salary_employees_p_loansController::class, 'do_dismissal_done_now'])->name('Main_salary_employees_p_loans.do_dismissal_done_now');
-    Route::post('/Main_salary_employees_p_loans/DoCachpayNow', [Main_salary_employees_p_loansController::class, 'DoCachpayNow'])->name('Main_salary_employees_p_loans.DoCachpayNow');
+    Route::get('/Main_salary_employees_P_loans/index', [Main_salary_employees_p_loansController::class, 'index'])->name('Main_salary_employees_P_loans.index');
+    Route::post('/Main_salary_employees_P_loans/load_edit_row', [Main_salary_employees_p_loansController::class, 'load_edit_row'])->name('Main_salary_employees_P_loans.load_edit_row');
+    Route::post('/Main_salary_employees_P_loans/store', [Main_salary_employees_p_loansController::class, 'store'])->name('Main_salary_employees_P_loans.store');
+    Route::post('/Main_salary_employees_P_loans/checkExsistsBefore', [Main_salary_employees_p_loansController::class, 'checkExsistsBefore'])->name('Main_salary_employees_P_loans.checkExsistsBefore');
+    Route::post('/Main_salary_employees_P_loans/ajax_search', [Main_salary_employees_p_loansController::class, 'ajax_search'])->name('Main_salary_employees_P_loans.ajax_search');
+    Route::get('/Main_salary_employees_P_loans/delete/{id}', [Main_salary_employees_p_loansController::class, 'delete'])->name('Main_salary_employees_P_loans.delete');
+    Route::post('/Main_salary_employees_P_loans/load_akast_details', [Main_salary_employees_p_loansController::class, 'load_akast_details'])->name('Main_salary_employees_P_loans.load_akast_details');
+    Route::post('/Main_salary_employees_P_loans/do_edit_row', [Main_salary_employees_p_loansController::class, 'do_edit_row'])->name('Main_salary_employees_P_loans.do_edit_row');
+    Route::post('/Main_salary_employees_P_loans/print_search', [Main_salary_employees_p_loansController::class, 'print_search'])->name('Main_salary_employees_P_loans.print_search');
+    Route::get('/Main_salary_employees_P_loans/do_dismissal_done_now/{id}', [Main_salary_employees_p_loansController::class, 'do_dismissal_done_now'])->name('Main_salary_employees_P_loans.do_dismissal_done_now');
+    Route::post('/Main_salary_employees_P_loans/DoCachpayNow', [Main_salary_employees_p_loansController::class, 'DoCachpayNow'])->name('Main_salary_employees_P_loans.DoCachpayNow');
 
     /*  بداية  الرواتب النهائيه المفصله */
     Route::get('/Main_salary_employee/index', [Main_salary_employeeController::class, 'index'])->name('Main_salary_employee.index');

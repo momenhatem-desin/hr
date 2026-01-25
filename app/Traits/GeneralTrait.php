@@ -67,18 +67,16 @@ trait GeneralTrait
                 // السلف الشهرية
                 $dataToUpdate['monthly_loan'] = get_sum_where(new Main_salary_employees_loans(), "total", array("com_code" => $com_code, "main_salary_employee_id" => $main_salary_employee_id));
                 //  تسحب قسط  السلفه المستديمة المطابقة  للشهر الحالى
-                $dataToUpdate['permanent_loan'] = Main_salary_P_loans_akast::where("com_code", "=", $com_code)->where("year_and_month", "=", $Finance_cln_periods_data['year_and_month'])->where("is_parent_dismissail_done", "=", 1)->where("is_archived", "=", 0)->where("state", "!=", "2")->where("employees_code", "=", $Main_salary_employee_data['employees_code'])->where("is_parent_dismissail_done", "=", 1)->sum('month_kast_value');
+                $dataToUpdate['permanent_loan'] = Main_salary_P_loans_akast::where("com_code", "=", $com_code)->where("year_and_month", "=", $Finance_cln_periods_data['year_and_month'])->where("is_parent_dismissail_done", "=", 1)->where("is_archived", "=", 0)->where("state", "!=", "2")->where("employees_code", "=", $Main_salary_employee_data['employees_code'])->get()->sum('month_kast_value');
                 $dataToUpdateAksat['state'] = 1;
                 $dataToUpdateAksat['main_salary_employee_id'] = $main_salary_employee_id;
-
+           
                 Main_salary_P_loans_akast::where("com_code", "=", $com_code)->where("year_and_month", "=", $Finance_cln_periods_data['year_and_month'])->where("is_parent_dismissail_done", "=", 1)->where("is_archived", "=", 0)->where("state", "!=", "2")->where("employees_code", "=", $Main_salary_employee_data['employees_code'])->update($dataToUpdateAksat);
 
                 $dataToUpdate['total_deductions'] = $dataToUpdate['socialinsurancecutmonthely'] + $dataToUpdate['medicalinsurancecutmonthely'] +  $dataToUpdate['sanctions_days_total_type1'] +
                     $dataToUpdate['absence_days'] + $dataToUpdate['discount'] + $dataToUpdate['monthly_loan'] + $dataToUpdate['permanent_loan'];
                 //صافى المرتب
                 $dataToUpdate['final_the_net'] = $dataToUpdate['last_salary_remain_blance'] + ($dataToUpdate['total_benefits'] - $dataToUpdate['total_deductions']);
-
-
                 update(new Main_salary_employee(), $dataToUpdate, array("com_code" => $com_code, "id" => $main_salary_employee_id, "is_archived" => 0));
             }
         }
