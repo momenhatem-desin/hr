@@ -13,7 +13,10 @@ class DepartementsController extends Controller
 {
     public function index()
     {
-        $com_code = auth()->user()->com_code;
+         if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(12);
+        } 
+        $com_code = auth('admin')->user()->com_code;
         $data = get_cols_where_p(new Departement(), array("*"), array('com_code' => $com_code), 'id', 'DESC', PC);
         if(!empty($data)){
              foreach($data as $info){
@@ -25,13 +28,19 @@ class DepartementsController extends Controller
 
     public function create()
     {
+           if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(105);
+        } 
         return view('admin.Departements.create');
     }
 
     public function store(DepartementsRequest $request)
     {
         try {
-            $com_code = auth()->user()->com_code;
+               if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(105);
+        } 
+            $com_code = auth('admin')->user()->com_code;
             $CheckExsists = get_cols_where_row(new Departement(), array('id'), array("com_code" => $com_code, 'name' => $request->name));
             if (!empty($CheckExsists)) {
                 return redirect()->back()->with(['error' => 'عفوا اسم الادارة مسجل من قبل !'])->withInput();
@@ -41,7 +50,7 @@ class DepartementsController extends Controller
             $dataToinsert['phones'] = $request->phones;
             $dataToinsert['notes'] = $request->notes;
             $dataToinsert['active'] = $request->active;
-            $dataToinsert['added_by'] = auth()->user()->id;
+            $dataToinsert['added_by'] = auth('admin')->user()->id;
             $dataToinsert['com_code'] = $com_code;
             insert(new Departement(), $dataToinsert);
             DB::commit();
@@ -54,7 +63,11 @@ class DepartementsController extends Controller
 
     public function edit($id)
     {
-        $com_code = auth()->user()->com_code;
+           if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(14);
+        } 
+
+        $com_code = auth('admin')->user()->com_code;
         $data = get_cols_where_row(new Departement(), array("*"), array('com_code' => $com_code, 'id' => $id));
         if (empty($data)) {
             return redirect()->route('departements.index')->with(['error' => 'عفوا غير قادر الي الوصول البي البيانات المطلوبة !']);
@@ -64,7 +77,10 @@ class DepartementsController extends Controller
     public function update($id, DepartementsRequest $request)
     {
         try {
-            $com_code = auth()->user()->com_code;
+               if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(14);
+        } 
+            $com_code = auth('admin')->user()->com_code;
             $data = get_cols_where_row(new Departement(), array("*"), array('com_code' => $com_code, 'id' => $id));
             if (empty($data)) {
                 return redirect()->route('departements.index')->with(['error' => 'عفوا غير قادر الي الوصول البي البيانات المطلوبة !']);
@@ -78,7 +94,7 @@ class DepartementsController extends Controller
             $dataToUpdate['phones'] = $request->phones;
             $dataToUpdate['notes'] = $request->notes;
             $dataToUpdate['active'] = $request->active;
-            $dataToUpdate['updated_by'] = auth()->user()->id;
+            $dataToUpdate['updated_by'] = auth('admin')->user()->id;
             update(new Departement(), $dataToUpdate, array('com_code' => $com_code, 'id' => $id));
             DB::commit();
             return redirect()->route('departements.index')->with(['success' => 'تم تحديث البيانات بنجاح']);
@@ -91,7 +107,10 @@ class DepartementsController extends Controller
     public function destroy($id)
     {
         try {
-            $com_code = auth()->user()->com_code;
+        if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(13);
+        } 
+            $com_code = auth('admin')->user()->com_code;
             $data = get_cols_where_row(new Departement(), array("*"), array('com_code' => $com_code, 'id' => $id));
             if (empty($data)) {
                 return redirect()->route('departements.index')->with(['error' => 'عفوا غير قادر الي الوصول البي البيانات المطلوبة !']);

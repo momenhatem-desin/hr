@@ -37,7 +37,10 @@ class EmployeesController extends Controller
       use GeneralTrait;
     public function index()
     {
-        $com_code = auth()->user()->com_code;
+       if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(19);
+        } 
+        $com_code = auth('admin')->user()->com_code;
         $data = get_cols_where_p(new Employee(), array("*"), array("com_code" => $com_code), "id", "DESC", PC);
         $other['branches'] = get_cols_where(new Branche(), array("id", "name"), array("com_code" => $com_code, "active" => 1));
         $other['departements'] = get_cols_where(new Departement(), array("id", "name"), array("com_code" => $com_code, "active" => 1));
@@ -64,6 +67,9 @@ class EmployeesController extends Controller
     }
     public function create()
     {
+       if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(21);
+        } 
         $com_code = auth('admin')->user()->com_code;
         $other['branches'] = get_cols_where(new Branche(), array("id", "name"), array("com_code" => $com_code, "active" => 1));
         $other['departements'] = get_cols_where(new Departement(), array("id", "name"), array("com_code" => $com_code, "active" => 1));
@@ -86,6 +92,9 @@ class EmployeesController extends Controller
     public function store(EmployeeRequest $request){
      
  try {
+     if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(21);
+        } 
     $com_code=auth('admin')->user()->com_code;
        $CheckExsists = get_cols_where_row(new Employee(), array("id"), array("emp_name" => $request->emp_name, 'com_code' => $com_code));
       if (!empty($CheckExsists)) {
@@ -187,7 +196,7 @@ class EmployeesController extends Controller
    if(!empty($request->emp_sal)){
      $dataToInsert['day_price']=$request->emp_sal/30;
    }
-    $dataToInsert['added_by'] = auth()->user()->id;
+    $dataToInsert['added_by'] = auth('admin')->user()->id;
     $dataToInsert['com_code'] = $com_code;
 
    if ($request->has('emp_photo')) {
@@ -210,7 +219,7 @@ class EmployeesController extends Controller
       if( $dataToInsert['emp_sal']>0){
       $dataToInsertSalaryArchive['employees_id']=$flag['id'];
       $dataToInsertSalaryArchive['value']=$dataToInsert['emp_sal'];
-      $dataToInsertSalaryArchive['added_by'] = auth()->user()->id;
+      $dataToInsertSalaryArchive['added_by'] = auth('admin')->user()->id;
       $dataToInsertSalaryArchive['com_code'] = $com_code;
       insert(new Employee_salary_archive(),$dataToInsertSalaryArchive);
 
@@ -242,7 +251,10 @@ class EmployeesController extends Controller
 
     public function edit($id)
     {
-     $com_code = auth()->user()->com_code;
+       if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(20);
+        } 
+     $com_code = auth('admin')->user()->com_code;
      $data = get_cols_where_row(new Employee(), array("*"), array('com_code' => $com_code,"id"=>$id));
       if (empty($data)) {
         return redirect()->route('admin.Employees.index')->with(['error' => 'عفوا  غير قادر الوصول للبيانات ! ']);
@@ -269,7 +281,10 @@ class EmployeesController extends Controller
       public function update($id,EmployessUpdateRequest $request)
     {
     try {
-            $com_code = auth()->user()->com_code;
+       if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(20);
+        } 
+            $com_code = auth('admin')->user()->com_code;
      $data = get_cols_where_row(new Employee(), array("*"), array('com_code' => $com_code,"id"=>$id));
       if (empty($data)) {
         return redirect()->route('admin.Employees.edit')->with(['error' => 'عفوا  غير قادر الوصول للبيانات ! ']);
@@ -370,7 +385,7 @@ class EmployeesController extends Controller
    $dataToupdate['emp_Basic_stay_com']=$request->emp_Basic_stay_com;
    $dataToupdate['MotivationType']=$request->MotivationType;
    $dataToupdate['is_active_login_system']=$request->is_active_login_system;
-   $dataToupdate['updated_by'] = auth()->user()->id;
+   $dataToupdate['updated_by'] = auth('admin')->user()->id;
    if(!empty($request->emp_sal) && is_numeric($request->emp_sal)){
     $dataToupdate['day_price'] = round($request->emp_sal / 30, 2);
 }
@@ -395,7 +410,7 @@ if($flag){
       if( $dataToupdate['emp_sal']!=$data['emp_sal']){
       $dataToInsertSalaryArchive['employees_id']=$id;
       $dataToInsertSalaryArchive['value']=$dataToupdate['emp_sal'];
-      $dataToInsertSalaryArchive['added_by'] = auth()->user()->id;
+      $dataToInsertSalaryArchive['added_by'] = auth('admin')->user()->id;
       $dataToInsertSalaryArchive['com_code'] = $com_code;
       insert(new Employee_salary_archive(),$dataToInsertSalaryArchive);
       }
@@ -489,7 +504,10 @@ if($flag){
    
      public function destroy($id)
     {
-     $com_code = auth()->user()->com_code;
+       if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(22);
+        } 
+     $com_code = auth('admin')->user()->com_code;
      $data = get_cols_where_row(new Employee(), array("employees_code","emp_name"), array('com_code' => $com_code,"id"=>$id));
       if (empty($data)) {
         return redirect()->route('admin.Employees.index')->with(['error' => 'عفوا  غير قادر الوصول للبيانات ! ']);
@@ -520,7 +538,7 @@ if($flag){
     {
         if ($request->ajax()) {
             $country_id = $request->country_id;
-            $other['governorates'] = get_cols_where(new governorates(), array("id", "name"), array("com_code" => auth()->user()->com_code, 'countires_id' => $country_id));
+            $other['governorates'] = get_cols_where(new governorates(), array("id", "name"), array("com_code" => auth('admin')->user()->com_code, 'countires_id' => $country_id));
             return view('admin.Employees.get_governorates',['other'=>$other]);
         }
     }
@@ -529,7 +547,7 @@ if($flag){
     {
         if ($request->ajax()) {
             $governorates_id = $request->governorates_id;
-            $other['centers'] = get_cols_where(new centers(), array("id", "name"), array("com_code" => auth()->user()->com_code, 'governorates_id' => $governorates_id));
+            $other['centers'] = get_cols_where(new centers(), array("id", "name"), array("com_code" => auth('admin')->user()->com_code, 'governorates_id' => $governorates_id));
             return view('admin.Employees.get_centers',['other'=>$other]);
         }
     }
@@ -659,7 +677,10 @@ return view('admin.Employees.ajax_search',['data'=>$data]);
 
   public function show($id)
     {
-     $com_code = auth()->user()->com_code;
+         if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(19);
+        } 
+     $com_code = auth('admin')->user()->com_code;
      $data = get_cols_where_row(new Employee(), array("*"), array('com_code' => $com_code,"id"=>$id));
       if (empty($data)) {
         return redirect()->route('admin.Employees.index')->with(['error' => 'عفوا  غير قادر الوصول للبيانات ! ']);
@@ -691,7 +712,10 @@ return view('admin.Employees.ajax_search',['data'=>$data]);
 
     public function download($id,$field_name)
     {
-     $com_code = auth()->user()->com_code;
+       if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(23);
+        } 
+     $com_code = auth('admin')->user()->com_code;
      $data = get_cols_where_row(new Employee(), array("$field_name"), array('com_code' => $com_code,"id"=>$id));
       if (empty($data)) {
         return redirect()->route('admin.Employees.index')->with(['error' => 'عفوا  غير قادر الوصول للبيانات ! ']);
@@ -707,7 +731,7 @@ return view('admin.Employees.ajax_search',['data'=>$data]);
       public function add_files($id,request $request)
     {
     try {
-      $com_code = auth()->user()->com_code;
+      $com_code = auth('admin')->user()->com_code;
      $data = get_cols_where_row(new Employee(), array("*"), array('com_code' => $com_code,"id"=>$id));
       if (empty($data)) {
         return redirect()->back()->with(['error' => 'عفوا  غير قادر الوصول للبيانات ! ']);
@@ -733,7 +757,7 @@ return view('admin.Employees.ajax_search',['data'=>$data]);
     $dataToInsert['file_path'] = $the_file_path;
     }
 
-   $dataToInsert['added_by'] = auth()->user()->id;
+   $dataToInsert['added_by'] = auth('admin')->user()->id;
    $dataToInsert['com_code'] = $com_code;
 
    
@@ -754,7 +778,7 @@ return view('admin.Employees.ajax_search',['data'=>$data]);
       public function add_allowances($id,request $request)
     {
     try {
-      $com_code = auth()->user()->com_code;
+      $com_code = auth('admin')->user()->com_code;
      $data = get_cols_where_row(new Employee(), array("*"), array('com_code' => $com_code,"id"=>$id));
       if (empty($data)) {
         return redirect()->back()->with(['error' => 'عفوا  غير قادر الوصول للبيانات ! ','jobs_data'=>'jobs_data']);
@@ -795,7 +819,10 @@ return view('admin.Employees.ajax_search',['data'=>$data]);
 
     public function destroy_files($id)
     {
-     $com_code = auth()->user()->com_code;
+       if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(23);
+        } 
+     $com_code = auth('admin')->user()->com_code;
      $data = get_cols_where_row(new Employees_files(), array("id"), array('com_code' => $com_code,"id"=>$id));
       if (empty($data)) {
         return redirect()->back()->with(['error' => 'عفوا  غير قادر الوصول للبيانات ! ']);
@@ -807,6 +834,9 @@ return view('admin.Employees.ajax_search',['data'=>$data]);
      public function destroy_allowances($id)
     {
       try{
+         if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(25);
+        } 
      $com_code = auth("admin")->user()->com_code;
      $data = get_cols_where_row(new Employees_fixed_suits(), array("id","employees_id"), array('com_code' => $com_code,"id"=>$id));
       if (empty($data)) {
@@ -841,7 +871,10 @@ return view('admin.Employees.ajax_search',['data'=>$data]);
 
    public function download_files($id)
     {
-     $com_code = auth()->user()->com_code;
+       if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(23);
+        } 
+     $com_code = auth('admin')->user()->com_code;
      $data = get_cols_where_row(new Employees_files(), array("file_path"), array('com_code' => $com_code,"id"=>$id));
       if (empty($data)) {
         return redirect()->back()->with(['error' => 'عفوا  غير قادر الوصول للبيانات ! ']);
@@ -856,7 +889,7 @@ return view('admin.Employees.ajax_search',['data'=>$data]);
 
   public function load_edit_allowances(Request $request)
 {
- 
+      
 if ($request->ajax()) {
     $com_code = auth('admin')->user()->com_code; 
     $data = get_cols_where_row(new Employees_fixed_suits(), array("*"), array('com_code' => $com_code,"id"=>$request->id));
@@ -880,7 +913,7 @@ if ($request->ajax()) {
      //تحقق من الصلاحيات وتحقق من عدم استخدام الموظف فى لنظام كليا
    DB::beginTransaction();
      $dataToupdate['value']=$request->allowances_value_edit;
-     $dataToupdate['updated_by'] = auth()->user()->id;
+     $dataToupdate['updated_by'] = auth('admin')->user()->id;
      $dataToupdate['updated_at'] =date("Y-m-d H:i:s");
 
     $flag =update(new Employees_fixed_suits(),$dataToupdate,array('com_code' => $com_code,"id"=>$id));
@@ -901,9 +934,9 @@ if ($request->ajax()) {
     }
 
   public function showSalaryArchive(Request $request){
-
+   
     if($request->ajax()){
-      $com_code = auth()->user()->com_code;
+      $com_code = auth('admin')->user()->com_code;
       $data=get_cols_where(new Employee_salary_archive(),array("*"),array("com_code"=>$com_code,"employees_id"=>$request->id));
        return view('admin.Employees.showSalaryArchive',['data' => $data]);
     }

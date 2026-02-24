@@ -38,6 +38,7 @@ use App\Http\Controllers\Admin\Permission_rolesController;
 use App\Http\Controllers\Admin\Permission_main_menuesController;
 use App\Http\Controllers\Admin\Permission_sub_menuesController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\EmployeeTasksController;
 use App\Http\Controllers\Admin\GrantsController;
 use App\Http\Controllers\Admin\main_direct_grantsController;
 use App\Http\Controllers\Admin\main_salary_employee_settlementsController;
@@ -468,6 +469,20 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::post('/Main_direct_grants/load_edit_row', [main_direct_grantsController::class, 'load_edit_row'])->name('Main_direct_grants.load_edit_row');
     Route::post('/Main_direct_grants/do_edit_row', [main_direct_grantsController::class, 'do_edit_row'])->name('Main_direct_grants.do_edit_row');
     Route::post('/Main_direct_grants/print_search', [main_direct_grantsController::class, 'print_search'])->name('Main_direct_grants.print_search');
+
+      /*  بداية مهام الموظفين */
+    Route::get('/EmployeeTasks/index', [EmployeeTasksController::class, 'index'])->name('EmployeeTasks.index');
+    Route::post('/EmployeeTasks/load_edit_row', [EmployeeTasksController::class, 'load_edit_row'])->name('EmployeeTasks.load_edit_row');
+    Route::post('/EmployeeTasks/store', [EmployeeTasksController::class, 'store'])->name('EmployeeTasks.store');
+    Route::post('/EmployeeTasks/checkExsistsBefore', [EmployeeTasksController::class, 'checkExsistsBefore'])->name('EmployeeTasks.checkExsistsBefore');
+    Route::post('/EmployeeTasks/ajax_search', [EmployeeTasksController::class, 'ajax_search'])->name('EmployeeTasks.ajax_search');
+    Route::get('/EmployeeTasks/delete/{id}', [EmployeeTasksController::class, 'delete'])->name('EmployeeTasks.delete');
+    Route::post('/EmployeeTasks/load_akast_details', [EmployeeTasksController::class, 'load_akast_details'])->name('EmployeeTasks.load_akast_details');
+    Route::post('/EmployeeTasks/do_edit_row', [EmployeeTasksController::class, 'do_edit_row'])->name('EmployeeTasks.do_edit_row');
+    Route::post('/EmployeeTasks/print_search', [EmployeeTasksController::class, 'print_search'])->name('EmployeeTasks.print_search');
+    Route::get('/EmployeeTasks/do_dismissal_done_now/{id}', [EmployeeTasksController::class, 'do_dismissal_done_now'])->name('EmployeeTasks.do_dismissal_done_now');
+    Route::post('/EmployeeTasks/DoCachpayNow', [EmployeeTasksController::class, 'DoCachpayNow'])->name('EmployeeTasks.DoCachpayNow');
+
 });
 
 

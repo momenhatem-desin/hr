@@ -25,10 +25,13 @@ class AdminRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'permission_roles_id' => 'required',
+            'permission_roles_id' =>'required_if:usertype,1',
             'username' => 'required',
             'password' => 'required',
             'active' => 'required',
+            'usertype' => 'required',
+            'employees_code' => 'required_if:usertype,2',
+            
 
         ];
     }
@@ -37,10 +40,12 @@ class AdminRequest extends FormRequest
     {
         return [
             'name.required' => 'اسم المستخدم كاملا مطلوب',
-            'permission_roles_id.required' => 'دور صلاحية المستخدم مطلوب',
+            'permission_roles_id.required_if' => 'دور صلاحية المستخدم مطلوب',
             'username.required' => 'اسم المستخدم للدخول به  مطلوب',
             'password.required' => ' كلمة المرور مطلوبة',
             'active.required' => '      حالة التفعيل مطلوبة',
+            'usertype.required' => '     نوع المستخدم مطلوب',
+            'employees_code.required_if' => '  كود الموظف مطلوب فى حاله انه موظف ',
 
         ];
     }

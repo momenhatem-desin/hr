@@ -21,6 +21,8 @@ return new class extends Migration
             $table->tinyInteger('is_master_admin')->default(0)->comment("هل هو ادمن رئيسى");
             $table->tinyInteger('permission_roles_id')->nullable()->comment("رقم دور الصلاحيه فى حاله انه ليس ادمن رئيسى");
             $table->tinyInteger('is_programer')->default(0)->comment("المبرمج فقط");
+            $table->tinyInteger('usertype')->default(0)->comment("هنا لو1 يبقى مستخدم عادى 2 موظف");
+            $table->bigInteger('employees_code')->nullable()->comment("رقم الموظف بجدول الموظفين فى حاله ان المستخدم موظف");
             $table->integer('added_by');
             $table->integer('updated_by')->nullable();
             $table->tinyInteger('active');

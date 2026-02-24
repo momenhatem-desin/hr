@@ -642,7 +642,9 @@
             <div class="col-md-4" >
                <div class="form-group">
                   <label>     راتب الموظف الشهري </label>
+                  @if(auth()->user()->is_master_admin==1 or check_permission_sub_menue_actions(122)==true)
                   <button id="showSalaryArchive" class="btn btn-sm btn-success" data-id="{{ $data['id'] }}">عرض الارشيف </button>
+                  @endif
                   <input disabled type="text" name="emp_sal" id="emp_sal" oninput disabled="this.value=this.value.replace(/[^0-9.]/g,'');" class="form-control" value="{{ old('emp_sal',$data['emp_sal']*1) }}" >
                   @error('emp_sal')
                   <span class="text-danger">{{ $message }}</span> 
@@ -805,9 +807,10 @@
           البدلات الثابتة المضافه للموظف 
             
          </h3>
-           <br>   
+           <br> 
+           @if(auth()->user()->is_master_admin==1 or check_permission_sub_menue_actions(24)==true)  
           <button style="margin: 4px;" id="load_add_allowances_model" data-toggle="modal"  data-target="#AddallowancesModel" class="btn btn-sm btn-success">اضافة بدل للموظف<i class="fa fa-arrow-up"></i></button> 
-
+            @endif
        @if(@isset($data['employees_fixed_suits']) and !@empty($data['employees_fixed_suits']) and count($data['employees_fixed_suits'])>0 )
          <table id="example2" class="table table-bordered table-hover">
             <thead class="custom_thead">
@@ -855,9 +858,13 @@
                      @endif
                   </td>
               
-                    <td>    
+                    <td> 
+                     @if(auth()->user()->is_master_admin==1 or check_permission_sub_menue_actions(25)==true)   
                      <a  href="{{ route('Employees.destroy_allowances',$info->id) }}" class="btn are_you_shur  btn-danger btn-sm">حذف</a>
+                     @endif
+                     @if(auth()->user()->is_master_admin==1 or check_permission_sub_menue_actions(26)==true)
                      <button data-id="{{ $info->id }}"  class="btn btn-primary load_edit_allowances btn-sm">تعديل </a>
+                     @endif
                   </td>
                </tr>
                @endforeach
@@ -996,12 +1003,13 @@
                    لايوجد مرفقات
                      @endif
                   </td>
-              
+              @if(auth()->user()->is_master_admin==1 or check_permission_sub_menue_actions(23)==true)
                   <td>
                      
                      <a  href="{{ route('Employees.destroy_files',$info->id) }}" class="btn are_you_shur  btn-danger btn-sm">حذف</a>
                        <a  href="{{ route('Employees.download_files',$info->id) }}" class="btn btn-primary btn-sm">تحميل <span class="fa fa-download"></span></a>
                   </td>
+                @endif  
                </tr>
                @endforeach
             </tbody>
@@ -1010,8 +1018,9 @@
          @else
          <p class="bg-danger text-center"> عفوا لاتوجد بيانات لعرضها</p>
          @endif
-
+      @if(auth()->user()->is_master_admin==1 or check_permission_sub_menue_actions(23)==true)
          <button id="load_add_file_model" data-toggle="modal"  data-target="#AddfilesModel" class="btn btn-sm btn-success">أرفاق جديد<i class="fa fa-arrow-up"></i></button>
+         @endif
             </div>
          </div>
 

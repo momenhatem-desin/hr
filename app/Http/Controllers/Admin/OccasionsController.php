@@ -9,18 +9,27 @@ class OccasionsController extends Controller
 {
 public function index()
 {
-$com_code = auth()->user()->com_code;
+    if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(113);
+        } 
+$com_code = auth('admin')->user()->com_code;
 $data = get_cols_where_p(new Occasion(), array("*"), array("com_code" => $com_code), 'id', 'DESC', PC);
 return view('admin.Occasions.index', ['data' => $data]);
 }
 public function create()
 {
+    if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(111);
+        } 
 return view('admin.Occasions.create');
 }
 public function store(OccasionsRequest $request)
 {
 try {
-$com_code = auth()->user()->com_code;
+    if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(111);
+        } 
+$com_code = auth('admin')->user()->com_code;
 $checkExsists = get_cols_where_row(new Occasion(), array("id"), array("com_code" => $com_code, "name" => $request->name));
 if (!empty($checkExsists)) {
 return redirect()->back()->with(['error' => 'عفوا  هذا الاسم مسجل من قبل '])->withInput();
@@ -34,7 +43,7 @@ $dataToInsert['days_counter']=intval($timeDiffrence/86400);
 */
 $dataToInsert['days_counter'] = $request->days_counter;
 $dataToInsert['active'] = $request->active;
-$dataToInsert['added_by'] = auth()->user()->id;
+$dataToInsert['added_by'] = auth('admin')->user()->id;
 $dataToInsert['com_code'] = $com_code;
 insert(new Occasion(), $dataToInsert);
 DB::commit();
@@ -46,7 +55,10 @@ return redirect()->back()->with(['error' => 'عفوا حدث خطأ ما ' . $ex
 }
 public function edit($id)
 {
-$com_code = auth()->user()->com_code;
+    if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(110);
+        } 
+$com_code = auth('admin')->user()->com_code;
 $data = get_cols_where_row(new Occasion(), array("*"), array("com_code" => $com_code, "id" => $id));
 if (empty($data)) {
 return redirect()->route('occasions.index')->with(['error' => 'عفوا هذه البيانات غير موجوده']);
@@ -56,7 +68,10 @@ return view('admin.Occasions.edit', ['data' => $data]);
 public function update($id, OccasionsRequest $request)
 {
 try {
-$com_code = auth()->user()->com_code;
+    if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(110);
+        } 
+$com_code = auth('admin')->user()->com_code;
 $data = get_cols_where_row(new Occasion(), array("*"), array("com_code" => $com_code, "id" => $id));
 if (empty($data)) {
 return redirect()->route('occasions.index')->with(['error' => 'عفوا هذه البيانات غير موجوده']);
@@ -71,7 +86,7 @@ $dataToUpdate['from_date'] = $request->from_date;
 $dataToUpdate['to_date'] = $request->to_date;
 $dataToUpdate['days_counter'] = $request->days_counter;
 $dataToUpdate['active'] = $request->active;
-$dataToUpdate['updated_by'] = auth()->user()->id;
+$dataToUpdate['updated_by'] = auth('admin')->user()->id;
 update(new Occasion(), $dataToUpdate, array("com_code" => $com_code, "id" => $id));
 DB::commit();
 return redirect()->route('occasions.index')->with(['success' => 'تم تحديث البيانات بنجاح']);
@@ -83,7 +98,10 @@ return redirect()->back()->with(['error' => 'عفوا حدث خطأ ما ' . $ex
 public function destroy($id)
 {
 try {
-$com_code = auth()->user()->com_code;
+     if(auth('admin')->user()->is_master_admin==0){
+        check_permission_sub_menue_actions_redirect(112);
+        } 
+$com_code = auth('admin')->user()->com_code;
 $data = get_cols_where_row(new Occasion(), array("*"), array("com_code" => $com_code, "id" => $id));
 if (empty($data)) {
 return redirect()->route('occasions.index')->with(['error' => 'عفوا هذه البيانات غير موجوده']);

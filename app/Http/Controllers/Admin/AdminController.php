@@ -11,16 +11,17 @@ use App\Models\Permission_rols;
 use App\Models\Admins_stores;
 use App\Http\Requests\AdminRequest;
 use App\Http\Requests\AdminRequestUpdate;
+use App\Models\Employee;
 use App\Models\Store;
 
 class AdminController extends Controller
 {
 public function index()
 {
-  /*  if(auth()->user()->is_master_admin==0){
+  /*  if(auth("admin")->user()->is_master_admin==0){
         check_permission_sub_menue_actions_redirect(155);
         }  */
-$com_code = auth()->user()->com_code;
+$com_code = auth("admin")->user()->com_code;
 $data = get_cols_where_p(new Admin(), array("*"), array("com_code" => $com_code), 'id', 'DESC', PC);
 if (!empty($data)) {
 foreach ($data as $info) {
@@ -38,24 +39,33 @@ $info->updated_by_admin = Admin::where('id', $info->updated_by)->value('name');
 }
 $Permission_rols=get_cols_where(new Permission_rols(),array("id","name"),array("active"=>1,'com_code'=>$com_code,'active'=>1),'id','ASC');
 
+
 return view('admin.admins_accounts.index', ['data' => $data,'Permission_rols'=>$Permission_rols]);
 }
 public function create()
 {
-    if(auth()->user()->is_master_admin==0){
+    if(auth("admin")->user()->is_master_admin==0){
         check_permission_sub_menue_actions_redirect(156);
         }  
-$com_code = auth()->user()->com_code;
+$com_code = auth("admin")->user()->com_code;
 $Permission_rols=get_cols_where(new Permission_rols(),array("id","name"),array("active"=>1,'com_code'=>$com_code,'active'=>1),'id','ASC');
-return view('admin.admins_accounts.create',['Permission_rols'=>$Permission_rols]);
+$employess=get_cols_where(new Employee(),array("id","emp_name","emp_email","Functiona_status","employees_code"),array("is_active_login_system"=>1,'com_code'=>$com_code,"Functiona_status"=>1),'id','ASC');
+
+if(!empty($employess)){
+    foreach($employess as $info){
+        $info->counterExsists=get_count_where(new Admin(),array("com_code"=>$com_code,"usertype"=>2,"is_master_admin"=>0,"employees_code"=>$info->employees_code));
+    }
+}
+return view('admin.admins_accounts.create',['Permission_rols'=>$Permission_rols,"employess"=>$employess]);
 }
 public function store(AdminRequest $request)
 {
-    if(auth()->user()->is_master_admin==0){
+    if(auth("admin")->user()->is_master_admin==0){
         check_permission_sub_menue_actions_redirect(156);
         }  
 try {
-$com_code = auth()->user()->com_code;
+$com_code = auth("admin")->user()->com_code;
+
 //check if not exsits
 $checkExists_name = Admin::where(['name' => $request->name, 'com_code' => $com_code])->first();
 if (!empty($checkExists_name)) { 
@@ -80,15 +90,28 @@ return redirect()->back()
 ->withInput();
 }
 $data['name'] = $request->name;
+$data['usertype'] = $request->usertype ;
+if($request->usertype==2){
+ $counterExsists=get_count_where(new Admin(),array("com_code"=>$com_code,"usertype"=>2,"is_master_admin"=>0,"employees_code"=>$request->employees_code)); 
+ if (!empty($counterExsists)) {
+return redirect()->back()
+->with(['error' => 'عفوا يوجد حساب دخول  مسجل من قبل'])
+->withInput();
+}  
+$data['employees_code'] =$request->employees_code;
+$data['permission_roles_id'] =0;
+}else{
 $data['permission_roles_id'] = $request->permission_roles_id;
+}
 $data['username'] = $request->username;
 $data['email'] = $request->email;
 $data['password'] = bcrypt($request->password);
 $data['active'] = $request->active;
 $data['created_at'] = date("Y-m-d H:i:s");
-$data['added_by'] = auth()->user()->id;
+$data['added_by'] = auth("admin")->user()->id;
 $data['com_code'] = $com_code;
 $data['date'] = date("Y-m-d");
+
 Admin::create($data);
 return redirect()->route('admin.admins_accounts.index')->with(['success' => 'لقد تم اضافة البيانات بنجاح']);
 } catch (\Exception $ex) {
@@ -100,21 +123,21 @@ return redirect()->back()
 }
 public function edit($id)
 {
-    if(auth()->user()->is_master_admin==0){
+    if(auth("admin")->user()->is_master_admin==0){
         check_permission_sub_menue_actions_redirect(157);
         }  
-$com_code = auth()->user()->com_code;
+$com_code = auth("admin")->user()->com_code;
 $data = get_cols_where_row(new Admin(),array("*"),array("com_code"=>$com_code,"id"=>$id));
 $Permission_rols=get_cols_where(new Permission_rols(),array("id","name"),array("active"=>1,'com_code'=>$com_code,'active'=>1),'id','ASC');
 return view('admin.admins_accounts.edit', ['data' => $data,'Permission_rols'=>$Permission_rols]);
 }
 public function update($id, AdminRequestUpdate $request)
 {
-    if(auth()->user()->is_master_admin==0){
+    if(auth("admin")->user()->is_master_admin==0){
         check_permission_sub_menue_actions_redirect(157);
         }  
 try { 
-$com_code = auth()->user()->com_code;
+$com_code = auth("admin")->user()->com_code;
 $data = get_cols_where_row(new Admin(),array("*"),array("com_code"=>$com_code,"id"=>$id));
 
 if (empty($data)) {
@@ -153,7 +176,7 @@ if($request->checkForupdatePassword==1)
 }
 
 $data_to_update['active'] = $request->active;
-$data_to_update['updated_by'] = auth()->user()->id;
+$data_to_update['updated_by'] = auth("admin")->user()->id;
 $data_to_update['updated_at'] = date("Y-m-d H:i:s");
 Admin::where(['id' => $id, 'com_code' => $com_code])->update($data_to_update);
 return redirect()->route('admin.admins_accounts.index')->with(['success' => 'لقد تم تحديث البيانات بنجاح']);
@@ -166,11 +189,11 @@ return redirect()->back()
 
 
 public function details($id){
-    if(auth()->user()->is_master_admin==0){
+    if(auth("admin")->user()->is_master_admin==0){
         check_permission_sub_menue_actions_redirect(159);
         }  
     try{
-    $com_code=auth()->user()->com_code;
+    $com_code=auth("admin")->user()->com_code;
     $data=get_cols_where_row(new Admin(),array("*"),array("com_code"=>$com_code,"id"=>$id));
     if(empty($data)){
     return redirect()->route('admin.admins_accounts.index')->with(['error'=>'عفوا غير قادر علي الوصول الي البيانات المطلوبة !!']);
@@ -218,11 +241,11 @@ public function details($id){
 
 public function add_treasuries($id,Request $request)
 {
-    if(auth()->user()->is_master_admin==0){
+    if(auth("admin")->user()->is_master_admin==0){
         check_permission_sub_menue_actions_redirect(160);
         }  
 try {
-$com_code = auth()->user()->com_code;
+$com_code = auth("admin")->user()->com_code;
 $data=get_cols_where_row(new Admin(),array("*"),array("com_code"=>$com_code,"id"=>$id));
 if(empty($data)){
 return redirect()->route('admin.admins_accounts.index')->with(['error'=>'عفوا غير قادر علي الوصول الي البيانات المطلوبة !!']);
@@ -237,7 +260,7 @@ $dataToInsert['admin_id']=$id;
 $dataToInsert['treasuries_id']=$info;
 $checkExists = get_cols_where_row(new Admins_treasuries(),array("id"),$dataToInsert);
 if(empty($checkExists)){
-$dataToInsert['added_by'] = auth()->user()->id;
+$dataToInsert['added_by'] = auth("admin")->user()->id;
 $dataToInsert['active'] = 1;
 $dataToInsert['created_at'] = date("Y-m-d H:i:s");
 $dataToInsert['date'] = date("Y-m-d");
@@ -255,12 +278,12 @@ return redirect()->back()
 
 public function delete_treasuries($rowid,$userid)
 {
-    if(auth()->user()->is_master_admin==0){
+    if(auth("admin")->user()->is_master_admin==0){
         check_permission_sub_menue_actions_redirect(160);
         }  
 try {
 
-    $com_code = auth()->user()->com_code;
+    $com_code = auth("admin")->user()->com_code;
     $data=get_cols_where_row(new Admin(),array("*"),array("com_code"=>$com_code,"id"=>$userid));
     if(empty($data)){
     return redirect()->route('admin.admins_accounts.index')->with(['error'=>'عفوا غير قادر علي الوصول الي البيانات المطلوبة !!']);
@@ -287,11 +310,11 @@ return redirect()->back()
 
 public function add_stores($id,Request $request)
 {
-    if(auth()->user()->is_master_admin==0){
+    if(auth("admin")->user()->is_master_admin==0){
         check_permission_sub_menue_actions_redirect(160);
         }  
 try {
-$com_code = auth()->user()->com_code;
+$com_code = auth("admin")->user()->com_code;
 $data=get_cols_where_row(new Admin(),array("*"),array("com_code"=>$com_code,"id"=>$id));
 if(empty($data)){
 return redirect()->route('admin.admins_accounts.index')->with(['error'=>'عفوا غير قادر علي الوصول الي البيانات المطلوبة !!']);
@@ -306,7 +329,7 @@ $dataToInsert['admin_id']=$id;
 $dataToInsert['store_id']=$info;
 $checkExists = get_cols_where_row(new Admins_stores(),array("id"),$dataToInsert);
 if(empty($checkExists)){
-$dataToInsert['added_by'] = auth()->user()->id;
+$dataToInsert['added_by'] = auth("admin")->user()->id;
 $dataToInsert['active'] = 1;
 $dataToInsert['created_at'] = date("Y-m-d H:i:s");
 $dataToInsert['date'] = date("Y-m-d");
@@ -323,12 +346,12 @@ return redirect()->back()
 
 public function delete_stores($rowid,$userid)
 {
-    if(auth()->user()->is_master_admin==0){
+    if(auth("admin")->user()->is_master_admin==0){
         check_permission_sub_menue_actions_redirect(160);
         }  
 try {
 
-    $com_code = auth()->user()->com_code;
+    $com_code = auth("admin")->user()->com_code;
     $data=get_cols_where_row(new Admin(),array("*"),array("com_code"=>$com_code,"id"=>$userid));
     if(empty($data)){
     return redirect()->route('admin.admins_accounts.index')->with(['error'=>'عفوا غير قادر علي الوصول الي البيانات المطلوبة !!']);
@@ -354,7 +377,7 @@ return redirect()->back()
 public function ajax_search(Request $request)
 {
 if ($request->ajax()) {
-  $com_code = auth()->user()->com_code;
+  $com_code = auth("admin")->user()->com_code;
 $search_by_name = $request->search_by_name;
 $permission_roles_id_search = $request->permission_roles_id_search;
 

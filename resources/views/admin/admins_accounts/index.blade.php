@@ -71,7 +71,10 @@
                      <tr>
                         <td>{{ $i }}</td>
                         <td>{{ $info->name }}</td>
-                        <td>{{ $info->permission_roles_name }}</td>
+                        <td>
+                           {{ $info->permission_roles_name }}
+                        
+                        </td>
                         <td>@if($info->active==1) مفعل @else معطل @endif</td>
                         <td>
                            @if(auth()->user()->is_master_admin==1 || check_permission_sub_menue(3))

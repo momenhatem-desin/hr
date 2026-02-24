@@ -26,6 +26,40 @@
          <div class="card-body">
             <form action="{{ route('admin.admins_accounts.store') }}" method="post" >
                @csrf
+
+               <div class="form-group">
+                 <label> نوع المستخدم</label>
+               <select name="usertype" id="usertype" class="form-control">
+                  <option   @if(old('usertype')==1) selected="selected"  @endif value="1"> مستخدم عادى بدور صلاحيه</option>
+                 <option @if(old('usertype')==2) selected="selected"   @endif value="2">مستخدم موظف مسجل بالموظفين بصلاحيات ثابته</option>
+               </select>
+                 @error('usertype')
+                <span class="text-danger">{{ $message }}</span>
+                 @enderror
+                  </div>
+                   <div class="form-group  employeId" style="display: none;">
+                     <label>   بيانات الموظفين المحدد لهم سماحيه الدخول الى النظام </label>
+                     <select name="employees_code" id="employees_code" class="form-control select2 ">
+                        <option value="">اختر الموظف  </option>
+                        @if (@isset($employess) && !@empty($employess))
+                        @foreach ($employess as $info )
+                    <option 
+                        data-n="{{$info->emp_name}}" 
+                        data-e="{{$info->emp_email}}" 
+                        @if(old('employees_code') == $info->employees_code) selected @endif
+                        value="{{ $info->employees_code }}"
+                        @if($info->counterExsists > 0) disabled @endif
+                     >
+                        {{ $info->emp_name }}
+                     </option>
+                  @endforeach
+                        @endif
+                     </select>
+                     @error('permission_roles_id')
+                     <span class="text-danger">{{ $message }}</span>
+                     @enderror
+                  </div>
+
                <div class="form-group">
                   <label>اسم  المستخدم كاملا </label>
                   <input name="name" id="name" class="form-control" value="{{ old('name') }}"  oninvalid="setCustomValidity('من فضلك ادخل هذا الحقل')" onchange="try{setCustomValidity('')}catch(e){}"  >
@@ -42,7 +76,7 @@
                </div>
                
            
-                  <div class="form-group">
+                  <div class="form-group roleBox">
                      <label>   بيانات الأدوار </label>
                      <select name="permission_roles_id" id="permission_roles_id" class="form-control select2 ">
                         <option value="">اختر صلاحية الدور للمستخدم  </option>
@@ -98,6 +132,42 @@
    //Initialize Select2 Elements
    $('.select2').select2({
      theme: 'bootstrap4'
+   });
+
+   $(document).ready(function(){
+
+     $(document).on('change', '#usertype', function () {
+
+    if ($(this).val() != 1) {
+        $(".employeId").show();
+       $(".roleBox").hide();   // ⬅️ إخفاء الأدوار
+        $("#name").attr('readonly',true);
+        $("#email").attr('readonly',true);
+       
+        $('#employees_code').select2({
+            theme: 'bootstrap4'
+        });
+    } else {
+        $(".employeId").hide();
+         $(".roleBox").show();   // ⬅️ إخفاء الأدوار
+       $("#name").attr('readonly',false);
+        $("#email").attr('readonly',false);
+    }
+
+});
+
+  $('#employees_code').on('select2:select', function (e) {
+
+    var data = e.params.data.element;
+
+    var emp_name = $(data).data('n');
+    var email    = $(data).data('e');
+
+    $("#name").val(emp_name);
+    $("#email").val(email);
+
+});
+
    });
 </script>
 @endsection
