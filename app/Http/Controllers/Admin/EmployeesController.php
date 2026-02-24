@@ -115,6 +115,7 @@ class EmployeesController extends Controller
    $dataToInsert['zketo_code']=$request->zketo_code;
    $dataToInsert['emp_name']=$request->emp_name;
    $dataToInsert['emp_gender']=$request->emp_gender;
+   $dataToInsert['branch_id']=$request->branch_id;
    $dataToInsert['Qualifications_id']=$request->Qualifications_id;
    $dataToInsert['Qualifications_year']=$request->Qualifications_year;
    $dataToInsert['graduation_estimate']=$request->graduation_estimate;
@@ -305,6 +306,7 @@ class EmployeesController extends Controller
    $dataToupdate['zketo_code']=$request->zketo_code;
    $dataToupdate['emp_name']=$request->emp_name;
    $dataToupdate['emp_gender']=$request->emp_gender;
+   $dataToInsert['branch_id']=$request->branch_id;
    $dataToupdate['Qualifications_id']=$request->Qualifications_id;
    $dataToupdate['Qualifications_year']=$request->Qualifications_year;
    $dataToupdate['graduation_estimate']=$request->graduation_estimate;
