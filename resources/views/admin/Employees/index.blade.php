@@ -127,7 +127,7 @@
                <tr>
                   <td>{{ $info->employees_code}}</td>
                   <td>{{ $info->emp_name}}</td>
-                  <td>{{ $info->Branch->name}}</td>
+                <td>{{ $info->Branch->name ?? '' }}</td>
                   <td>
                   @if(!empty($info->Departement))
                   {{ $info->Departement->name}}
